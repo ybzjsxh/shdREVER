@@ -14,7 +14,7 @@ export default class Mbody extends Component {
         {
           label: "设备IP",
           prop: "ip",
-          width: 150,
+          // width: 120,
           render: function(data){
             return (
               <span>
@@ -27,33 +27,41 @@ export default class Mbody extends Component {
         {
           label: "设备名称",
           prop: "name",
-          width: 160,
+          // width: 80,
           render: function(data){
             return <Tag type="primary">{data.name}</Tag>
           }
         },
         {
           label: "操作",
-          prop: "address",
+          prop: "execution",
           render: function(){
             return (
               <span>
-                <Button type="danger"><Icon name="delete2"/> 关闭此设备</Button>
-                <Button type="success"><Icon name="close"/> 清除此IP</Button>
+                <Button type="danger" size="small" onClick={this.closeDevice}><Icon name="delete2"/> 关闭此设备</Button>
+                <Button type="success" size="small"><Icon name="close"/> 清除此IP</Button>
               </span>
             )
           }
         }
       ],
-      data: [{
-        ip: '192.168.0.1',
-        name: 'xxx',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333
-       }]
+      data: {
+        device:[
+          {
+            ip: '192.168.0.1',
+            name: 'xxx'
+          }
+        ]
+      }
     }
+
+    this.closeDevice = this.closeDevice.bind(this)
+  }
+
+  closeDevice(e) {
+    console.log(e)
+    this.setState({data: {}})
+    console.log('ddd')
   }
 
   render() {
@@ -61,11 +69,11 @@ export default class Mbody extends Component {
       <Table
         style={{width: '100%'}}
         columns={this.state.columns}
-        data={this.state.data}
+        data={this.state.data.device}
         border={true}
         height={250}
         highlightCurrentRow={true}
-        onCurrentChange={item=>{console.log(item)}}
+        onCurrentChange={this.closeDevice}
       />
     )
   }
