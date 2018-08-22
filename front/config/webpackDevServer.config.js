@@ -84,6 +84,14 @@ module.exports = function(proxy, allowedHost) {
       '/login': {
         target: 'http://localhost:8888',
         secure: false
+      },
+      '/logout': {
+        target: 'http://localhost:8888',
+        secure: false
+      },
+      '/index': {
+        target: 'http://localhost:8888',
+        secure: false
       }
     },
     before(app) {

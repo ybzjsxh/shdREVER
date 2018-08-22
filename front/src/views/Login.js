@@ -5,13 +5,17 @@ import './Login.css';
 import axios from 'axios'
 
 
-import {Button, Input, Form, Layout} from 'element-react'
+import {Button, Input, Form, Layout, Alert} from 'element-react'
 import 'element-theme-default';
 
 class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      show1: false,
+      dis1: 'none',
+      show2: false,
+      dis2: 'none',
       form: {
         pass: ''
       },
@@ -24,9 +28,7 @@ class Login extends Component {
             } else {
               if (this.state.form.pass !== '') {
                 // this.refs.form.validateField('pass');
-                  if(value === "ytzt888555") {
-                    console.log("PASSED!")
-                  }
+                // console.log(this.refs.form)
               }
               callback();
             }
@@ -47,15 +49,29 @@ class Login extends Component {
     //     return false;
     //   }
     // });
-    axios.post('/login',{
-      pass: this.state.form.pass
-    })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.log(error.message);
-    })
+    if(this.state.form.pass !== '') {
+      axios.post('/login', {
+        pass: this.state.form.pass
+      })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.code === 1) {
+            console.log('logined')
+            window.location.href = 'http://localhost:8888/'
+          } else {
+            this.setState({show1: true})
+            this.state.show1 ? this.setState({dis1:"block"}):this.setState({dis1:"none"})
+          }
+        })
+        .catch(error => {
+          console.log(error.message);
+        })
+    } else {
+      /*
+      * TODO: 改成Alert
+      * */
+      alert('请输入密码！')
+    }
   }
   //
   // handleReset(e) {
@@ -76,8 +92,10 @@ class Login extends Component {
             <Logo/>
             <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
               <Layout.Row justify="center" type="flex">
-                <Layout.Col span="12" xs="24" lg="12">
-                  <Form.Item label="请登录" prop="pass">
+                <Layout.Col span="12" xs="22" lg="12">
+                  <Alert title="密码错误" type="error" showIcon={true} style={{display: this.state.dis1}} onClose={()=>this.setState({show1:false,dis1:'none'})} closeText="晓得了:("/>
+                  <Alert title="请输入密码" type="error" showIcon={true} style={{display: this.state.dis2}} onClose={()=>this.setState({show2:false,dis2:'none'})} closeText="晓得了:("/>
+                  <Form.Item label="请登录" labelPosition="left" prop="pass">
                     <Input type="password" onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off"/>
                   </Form.Item>
                 </Layout.Col>
