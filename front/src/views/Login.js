@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Logo from '../components/Logo'
 import './Login.css';
 
+import axios from 'axios'
+
 
 import {Button, Input, Form, Layout} from 'element-react'
 import 'element-theme-default';
@@ -37,14 +39,23 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    this.refs.form.validate((valid) => {
-      if (valid) {
-        alert('submit!');
-      } else {
-        console.log('error submit!!');
-        return false;
-      }
-    });
+    // this.refs.form.validate((valid) => {
+    //   if (valid) {
+    //     alert('submit!');
+    //   } else {
+    //     console.log('error submit!!');
+    //     return false;
+    //   }
+    // });
+    axios.post('/login',{
+      pass: this.state.form.pass
+    })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error.message);
+    })
   }
   //
   // handleReset(e) {
