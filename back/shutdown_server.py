@@ -28,14 +28,12 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session['password'] = request.form['pass']
-        return redirect(url_for('index'))
-    return '''
-        <form action="" method="post">
-            <p><input type=text name=username>
-            <p><input type=submit value=Login>
-        </form>
-    '''
+        # session['password'] = request.form['pass']
+        print request.form.get('pass')
+        if request.form.get('pass') == 'ytzt888555':
+            return 'ok'
+        return 'wrong password'
+    return 'get is the method'
 
 @app.route('/logout')
 def logout():
