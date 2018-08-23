@@ -51,6 +51,10 @@ export default class Mbody extends Component {
           {
             ip: '192.168.0.1',
             name: 'xxx'
+          },
+          {
+            ip: '192.168.0.1',
+            name: 'xxx'
           }
         ]
       }
@@ -69,12 +73,18 @@ export default class Mbody extends Component {
     this.getAllDevice = setInterval(() => {
       axios.get('/getAllDevice')
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
+          this.setState({data: Object.assign({}, [...this.state.data.device, res.data])})
+          console.log(this.state.data)
         })
         .catch(err => {
           console.log(err.message);
         })
     }, 5000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.getAllDevice)
   }
 
   render() {
@@ -86,7 +96,6 @@ export default class Mbody extends Component {
         border={true}
         height={250}
         highlightCurrentRow={true}
-        onCurrentChange={this.closeDevice}
       />
     )
   }

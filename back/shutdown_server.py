@@ -51,7 +51,8 @@ def register():
         name = request.args.get('name').encode('ascii')
         address = request.args.get('ip').encode('ascii')
         print name, address
-        devices[address] = name
+        devices["ip"] = address
+        devices["name"] = name
         states[address] = 0
         print devices
         return '{"code":1}'
