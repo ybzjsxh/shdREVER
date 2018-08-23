@@ -60,8 +60,9 @@ def register():
 @app.route('/getAllDevice')
 def getAllDevice():
     if request.method == 'GET':
-        request.headers.set("content-type", "text/plain")
-        return devices
+        print request.headers.get('User-Agent')
+
+        return json.dumps(devices)
 
 
 @app.route('/closeDevice')
