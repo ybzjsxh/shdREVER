@@ -12,10 +12,8 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      show1: false,
-      dis1: 'none',
-      show2: false,
-      dis2: 'none',
+      err1: false, // 密码错误
+      err2: false, // 密码为空
       form: {
         pass: ''
       },
@@ -59,18 +57,14 @@ class Login extends Component {
             console.log('logined')
             window.location.href = 'http://localhost:8888/'
           } else {
-            this.setState({show1: true})
-            this.state.show1 ? this.setState({dis1:"block"}):this.setState({dis1:"none"})
+            this.setState({err1: true})
           }
         })
         .catch(error => {
           console.log(error.message);
         })
     } else {
-      /*
-      * TODO: 改成Alert
-      * */
-      alert('请输入密码！')
+      this.setState({err2: true})
     }
   }
   //
@@ -87,30 +81,34 @@ class Login extends Component {
   }
 
   render() {
-      return (
-          <div className="container">
-            <Logo/>
-            <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
-              <Layout.Row justify="center" type="flex">
-                <Layout.Col span="12" xs="22" lg="12">
-                  <Alert title="密码错误" type="error" showIcon={true} style={{display: this.state.dis1}} onClose={()=>this.setState({show1:false,dis1:'none'})} closeText="晓得了:("/>
-                  <Alert title="请输入密码" type="error" showIcon={true} style={{display: this.state.dis2}} onClose={()=>this.setState({show2:false,dis2:'none'})} closeText="晓得了:("/>
-                  <Form.Item label="请登录" labelPosition="left" prop="pass">
-                    <Input type="password" onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off"/>
-                  </Form.Item>
-                </Layout.Col>
-              </Layout.Row>
-              <Layout.Row type="flex" justify="center">
-                <Layout.Col xs="24" md="14" lg="14">
-                <Form.Item>
-                    <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>登陆</Button>
-                    {/*<Button type="success" plain="true" size="large" onClick={this.handleReset.bind(this)}>重置</Button>*/}
-                </Form.Item>
-                </Layout.Col>
-              </Layout.Row>
-            </Form>
-          </div>
-      );
+    return (
+      <div className="container">
+        <Logo/>
+        <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
+          <Layout.Row justify="center" type="flex">
+            <Layout.Col span="12" xs="22" lg="12">
+              {this.state.err1
+                ? <Alert title="密码错误" type="error" showIcon={true} onClose={()=>this.setState({err1: false})} closeText="晓得了:("/>
+                : null}
+              {this.state.err2
+                ? <Alert title="请输入密码" type="error" showIcon={true} onClose={()=>this.setState({err2: false})} closeText="晓得了:("/>
+                : null}
+              <Form.Item label="请登录" labelPosition="left" prop="pass">
+                <Input type="password" onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off"/>
+              </Form.Item>
+            </Layout.Col>
+          </Layout.Row>
+          <Layout.Row type="flex" justify="center">
+            <Layout.Col xs="24" md="14" lg="14">
+            <Form.Item>
+                <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>登陆</Button>
+                {/*<Button type="success" plain="true" size="large" onClick={this.handleReset.bind(this)}>重置</Button>*/}
+            </Form.Item>
+            </Layout.Col>
+          </Layout.Row>
+        </Form>
+      </div>
+    );
   }
 }
 
