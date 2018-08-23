@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import {Button, Icon, Table, Tag} from 'element-react'
+import axios from 'axios';
 
 export default class Mbody extends Component {
   constructor(props) {
@@ -62,6 +63,18 @@ export default class Mbody extends Component {
     console.log(e)
     this.setState({data: {}})
     console.log('ddd')
+  }
+
+  componentDidMount() {
+    this.getAllDevice = setInterval(() => {
+      axios.get('/getAllDevice')
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err.message);
+        })
+    }, 5000)
   }
 
   render() {

@@ -86,7 +86,7 @@ class Login extends Component {
         <Logo/>
         <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
           <Layout.Row justify="center" type="flex">
-            <Layout.Col span="12" xs="22" lg="12">
+            <Layout.Col span="12" xs="22" lg="10">
               {this.state.err1
                 ? <Alert title="密码错误" type="error" showIcon={true} onClose={()=>this.setState({err1: false})} closeText="晓得了:("/>
                 : null}
@@ -99,10 +99,10 @@ class Login extends Component {
             </Layout.Col>
           </Layout.Row>
           <Layout.Row type="flex" justify="center">
-            <Layout.Col xs="24" md="14" lg="14">
+            <Layout.Col xs="24" md="14" lg="12">
             <Form.Item>
-                <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>登陆</Button>
-                {/*<Button type="success" plain="true" size="large" onClick={this.handleReset.bind(this)}>重置</Button>*/}
+              <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>登陆</Button>
+              {/*<Button type="success" plain="true" size="large" onClick={this.handleReset.bind(this)}>重置</Button>*/}
             </Form.Item>
             </Layout.Col>
           </Layout.Row>

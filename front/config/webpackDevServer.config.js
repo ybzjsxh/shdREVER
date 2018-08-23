@@ -92,6 +92,10 @@ module.exports = function(proxy, allowedHost) {
       '/index': {
         target: 'http://localhost:8888',
         secure: false
+      },
+      '/getAllDevice': {
+        target: 'http://localhost:8888',
+        secure: false
       }
     },
     before(app) {
