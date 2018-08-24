@@ -3,11 +3,12 @@ import hashlib
 
 app = Flask(__name__)
 
-devices = {}
+devices = []
 states = {}
 
 
 def checkCloseState(ip):
+    print states
     ret = states[ip]
     if ret == 0:
         return False
@@ -51,10 +52,7 @@ def register():
         name = request.args.get('name').encode('ascii')
         address = request.args.get('ip').encode('ascii')
         print name, address
-        devices["ip"] = address
-        devices["name"] = name
-        states[address] = 0
-        print devices
+        devices.append({"ip":address, "name": name, "state": 0})
         return '{"code":1}'
 
 
@@ -62,7 +60,7 @@ def register():
 def getAllDevice():
     if request.method == 'GET':
         print request.headers.get('User-Agent')
-
+        # print devices
         return json.dumps(devices)
 
 
@@ -77,15 +75,19 @@ def closeDevice():
 @app.route('/closeAll')
 def closeAll():
     if request.method == 'GET':
-        for i in devices:
-            print 'close device='+i
-            states[i] = 1
-        return '{"code":1}'
+        # for i in devices:
+        #     print 'close device='+i
+        #     states[i] = 1
+        # return '{"code":1}'
+        devices = []
+        print devices
+        return json.dumps(devices)
 
 
 @app.route('/checkState')
 def checkState():
     if request.method == 'GET':
+        print states
         cip = request.args.get('ip')
         print cip
         if checkCloseState(cip) == False:
@@ -93,6 +95,17 @@ def checkState():
         else:
             del devices[cip]
             return '{"code":1"}'
+
+@app.route('/logoutDevice')
+def logoutDevice():
+    if request.method == 'GET':
+        address = request.args.get('ip').encode('ascii')
+        name = request.args.get('name').encode('ascii')
+        if {"ip": address, "name": name, "state": 0} in devices:
+            devices.remove({"ip": address,"name": name, "state": 0})
+            return '{code:"1"}'
+        return '{code: "0"}'
+
 
 
 # set the secret key.  keep this really secret:

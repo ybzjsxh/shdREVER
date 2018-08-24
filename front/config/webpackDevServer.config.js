@@ -96,7 +96,15 @@ module.exports = function(proxy, allowedHost) {
       '/getAllDevice': {
         target: 'http://localhost:8888',
         secure: false
-      }
+      },
+      '/closeAll': {
+        target: 'http://localhost:8888',
+        secure: false
+      },
+      '/logoutDevice': {
+        target: 'http://localhost:8888',
+        secure: false
+      },
     },
     before(app) {
       // This lets us open files from the runtime error overlay.

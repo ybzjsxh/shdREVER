@@ -40,33 +40,42 @@ export default class Mbody extends Component {
             return (
               <span>
                 <Button type="danger" size="small" onClick={this.closeDevice}><Icon name="delete2"/> 关闭此设备</Button>
-                <Button type="success" size="small"><Icon name="close"/> 清除此IP</Button>
+                <Button type="success" size="small" onClick={this.clearDevice}><Icon name="close"/> 清除此IP</Button>
               </span>
             )
           }
         }
       ],
-      data: {
-        device:[
-          {
-            ip: '192.168.0.1',
-            name: 'xxx'
-          },
-          {
-            ip: '192.168.0.1',
-            name: 'xxx'
-          }
-        ]
-      }
+      data: [
+          // {
+          //   ip: '192.168.0.1',
+          //   name: 'xxx'
+          // },
+          // {
+          //   ip: '192.168.0.1',
+          //   name: 'xxx'
+          // }
+      ]
     }
 
-    this.closeDevice = this.closeDevice.bind(this)
   }
 
   closeDevice(e) {
-    console.log(e)
-    this.setState({data: {}})
-    console.log('ddd')
+    axios.get('/closeDevice')
+      .then(res=>{
+        this.setState({data: [res.data]})
+      })
+  }
+
+  clearDevice(e) {
+    axios.get('/logoutDevice')
+      .then(res=>{
+        this.setState({data: [res.data]})
+      })
+      .then(error => {
+        console.log(error.message)
+        alert('请求出错！')
+      })
   }
 
   componentDidMount() {
@@ -74,7 +83,7 @@ export default class Mbody extends Component {
       axios.get('/getAllDevice')
         .then(res => {
           // console.log(res.data);
-          this.setState({data: Object.assign({}, [...this.state.data.device, res.data])})
+          this.setState({data: Object.assign([], res.data)})
           console.log(this.state.data)
         })
         .catch(err => {
@@ -92,10 +101,12 @@ export default class Mbody extends Component {
       <Table
         style={{width: '100%'}}
         columns={this.state.columns}
-        data={this.state.data.device}
+        data={this.state.data}
         border={true}
         height={250}
         highlightCurrentRow={true}
+        stripe={true}
+        emptyText={'无设备连接'}
       />
     )
   }
