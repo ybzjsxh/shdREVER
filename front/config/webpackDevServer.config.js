@@ -101,7 +101,7 @@ module.exports = function(proxy, allowedHost) {
         target: 'http://localhost:8888',
         secure: false
       },
-      '/logoutDevice': {
+      '/closeDevice': {
         target: 'http://localhost:8888',
         secure: false
       },

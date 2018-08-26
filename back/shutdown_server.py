@@ -4,12 +4,12 @@ from myLogger import myLogger
 
 app = Flask(__name__)
 
-devices = []
+DEVICES = []
 
 
 def checkCloseState(ip):
-    print devices
-    ret = devices[ip]
+    print DEVICES
+    ret = DEVICES[ip]
     if ret == 0:
         return False
     return True
@@ -51,46 +51,54 @@ def register():
     if request.method == 'GET':
         name = request.args.get('name').encode('ascii')
         address = request.args.get('ip').encode('ascii')
-        print name, address
-        devices.append({"ip":address, "name": name, "state": 0})
-        return '{"code":1}'
+        if {"ip": address, "name": name, "state": 0} in DEVICES:
+            return json.dumps({'err':{'code': 500,'msg':"device already exist!"}})
+        else:
+            print 'register device: ', name, address
+            myLogger.info('register device: {0} {1}'.format(name, address))
+            DEVICES.append({"ip": address, "name": name, "state": 0})
+            return '{"code":1}'
 
 
 @app.route('/getAllDevice')
 def getAllDevice():
     if request.method == 'GET':
         print request.headers.get('User-Agent')
-        # print devices
-        myLogger.info(devices)
-        return json.dumps(devices)
+        # print DEVICES
+        # myLogger.info(DEVICES)
+        return json.dumps(DEVICES)
 
 
 @app.route('/closeDevice')
 def closeDevice():
     if request.method == 'GET':
-        ip = request.args.get("ip").encode('ascii')
-        name = request.args.get("name").encode('ascii')
-        print 'close device=' + ip
-        print devices
-        try:
-            devices.remove({"ip":ip,"name":name,"state":0})
-        except ValueError, e:
-            return json.dumps({'err':{'code': 404,'msg':"device not exist!"}})
-        print devices
-        return json.dumps('{"code":1}')
+        # ip = request.args.get("ip").encode('ascii')
+        # name = request.args.get("name").encode('ascii')
+        # print 'close device=' + ip
+        # print DEVICES
+        # try:
+        #     DEVICES.remove({"ip":ip,"name":name,"state":0})
+        # except ValueError, e:
+        #     return json.dumps({'err':{'code': 404,'msg':"device not exist!"}})
+        # print DEVICES
+        # return json.dumps('{"code":1}')
+        index = request.args.get('index').encode('ascii')
+        for index in DEVICES:
+            DEVICES.remove(index)
+            return '{"code":0}'
 
 
 @app.route('/closeAll')
 def closeAll():
     if request.method == 'GET':
-        # for i in devices:
+        # for i in DEVICES:
         #     print 'close device='+i
         #     states[i] = 1
         # return '{"code":1}'
-        devices = []
-        print devices
+        del DEVICES[:]
+        print DEVICES
 
-        return json.dumps(devices)
+        return json.dumps(DEVICES)
 
 
 @app.route('/checkState')
@@ -99,21 +107,25 @@ def checkState():
         cip = request.args.get('ip')
         print cip
         if checkCloseState(cip) == False:
-            return json.dumps(devices)
+            return json.dumps(DEVICES)
         else:
-            del devices[cip]
-            return '{"code":1"}'
+            del DEVICES[cip]
+            return '{"code":1}'
 
-@app.route('/logoutDevice')
-def logoutDevice():
-    if request.method == 'GET':
-        address = request.args.get('ip').encode('ascii')
-        name = request.args.get('name').encode('ascii')
-        if {"ip": address, "name": name, "state": 0} in devices:
-            devices.remove({"ip": address,"name": name, "state": 0})
-            return '{code:"1"}'
-        return '{code: "0"}'
 
+# @app.route('/logoutDevice')
+# def logoutDevice():
+#     if request.method == 'GET':
+#         # address = request.args.get('ip').encode('ascii')
+#         # name = request.args.get('name').encode('ascii')
+#         index = request.args.get('index').encode('ascii')
+#         for index in DEVICES:
+#             DEVICES.remove(index)
+#             return '{"code":"0"}'
+#         # if {"ip": address, "name": name, "state": 0} in DEVICES:
+#         #     DEVICES.remove({"ip": address,"name": name, "state": 0})
+#         #     return '{code:"1"}'
+#         return '{code: "0"}'
 
 
 # set the secret key.  keep this really secret:

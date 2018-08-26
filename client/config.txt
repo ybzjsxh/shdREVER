@@ -1,0 +1,4 @@
+localhost
+xxxx
+"shutdown -s -t 60"
+sudo shutdown -h 1
