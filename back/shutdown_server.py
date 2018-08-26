@@ -1,15 +1,15 @@
 from flask import Flask, session, redirect, url_for, escape, request, render_template, json
 import hashlib
+from myLogger import myLogger
 
 app = Flask(__name__)
 
 devices = []
-states = {}
 
 
 def checkCloseState(ip):
-    print states
-    ret = states[ip]
+    print devices
+    ret = devices[ip]
     if ret == 0:
         return False
     return True
@@ -61,15 +61,23 @@ def getAllDevice():
     if request.method == 'GET':
         print request.headers.get('User-Agent')
         # print devices
+        myLogger.info(devices)
         return json.dumps(devices)
 
 
 @app.route('/closeDevice')
 def closeDevice():
     if request.method == 'GET':
-        address = request.args.get("ip").encode('ascii')
-        print 'close device='+address
-        return '{"code":1}'
+        ip = request.args.get("ip").encode('ascii')
+        name = request.args.get("name").encode('ascii')
+        print 'close device=' + ip
+        print devices
+        try:
+            devices.remove({"ip":ip,"name":name,"state":0})
+        except ValueError, e:
+            return json.dumps({'err':{'code': 404,'msg':"device not exist!"}})
+        print devices
+        return json.dumps('{"code":1}')
 
 
 @app.route('/closeAll')
@@ -81,17 +89,17 @@ def closeAll():
         # return '{"code":1}'
         devices = []
         print devices
+
         return json.dumps(devices)
 
 
 @app.route('/checkState')
 def checkState():
     if request.method == 'GET':
-        print states
         cip = request.args.get('ip')
         print cip
         if checkCloseState(cip) == False:
-            return '{"code":0}'
+            return json.dumps(devices)
         else:
             del devices[cip]
             return '{"code":1"}'
