@@ -88,6 +88,7 @@ export default class Mbody extends Component {
         .then(res => {
           // console.log(res.data);
           this.setState({data: Object.assign([], res.data)})
+          this.props.setDevNum(res.data.length)
           console.log(this.state.data)
         })
         .catch(err => {

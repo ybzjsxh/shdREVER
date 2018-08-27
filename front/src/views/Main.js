@@ -12,7 +12,7 @@ class Main extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      devNum: 1,
+      devNum: 0,
       data: props.data
     }
   }
@@ -22,6 +22,13 @@ class Main extends Component {
       .then(res=>{
         this.setState({data: Object.assign({}, {device: [res.data]})});
       })
+      .catch(error=>{
+        console.log(error.message);
+      })
+  }
+
+  setDevNum = (devNum)=>{
+    this.setState({devNum: devNum})
   }
 
   render() {
@@ -44,7 +51,7 @@ class Main extends Component {
         </Layout.Row>
         <Layout.Row justify="center" type="flex">
           <Layout.Col span="24" xs="24" md="16" lg="12">
-            <Mbody />
+            <Mbody setDevNum={this.setDevNum}/>
           </Layout.Col>
         </Layout.Row>
       </div>
