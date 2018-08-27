@@ -8,6 +8,7 @@ export default class Mbody extends Component {
     super(props);
 
     this.state = {
+      loading: false,
       columns: [
         {
           type: 'index'
@@ -39,7 +40,7 @@ export default class Mbody extends Component {
           render: (row, column, index) => {
             return (
               <span>
-                <Button type="danger" size="small" loading={false} onClick={this.closeDevice.bind(this, index)}><Icon name="delete2"/> 关闭此设备</Button>
+                <Button type="danger" size="small" loading={this.state.loading} onClick={this.closeDevice.bind(this, index)}><Icon name="delete2"/> 关闭此设备</Button>
                 <Button type="success" size="small" onClick={this.clearDevice.bind(this, index)}><Icon name="close"/> 清除此IP</Button>
               </span>
             )
@@ -84,7 +85,9 @@ export default class Mbody extends Component {
 
   componentDidMount() {
     this.getAllDevice = setInterval(() => {
-      axios.get('/getAllDevice')
+      axios.get('/getAllDevice', {
+        timeout: 500
+      })
         .then(res => {
           // console.log(res.data);
           this.setState({data: Object.assign([], res.data)})

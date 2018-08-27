@@ -15,6 +15,7 @@ class Main extends Component {
       devNum: 0,
       data: props.data
     }
+    this.setDevNum = this.setDevNum.bind(this)
   }
 
   closeAll() {
