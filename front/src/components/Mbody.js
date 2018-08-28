@@ -41,7 +41,7 @@ export default class Mbody extends Component {
             return (
               <span>
                 <Button type="danger" size="small" loading={this.state.loading} onClick={this.closeDevice.bind(this, index)}><Icon name="delete2"/> 关闭此设备</Button>
-                <Button type="success" size="small" onClick={this.clearDevice.bind(this, index)}><Icon name="close"/> 清除此IP</Button>
+                <Button type="success" size="small" plain={true} disabled={true} onClick={this.clearDevice.bind(this, index)}><Icon name="close"/> 清除此IP</Button>
               </span>
             )
           }
