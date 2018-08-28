@@ -55,7 +55,8 @@ class Login extends Component {
           console.log(response.data);
           if (response.data.code === 1) {
             console.log('logined')
-            window.location.href = 'http://localhost:8888/'
+            // window.location.href = 'http://localhost:8888/'
+            this.props.history.push('/main')
           } else {
             this.setState({err1: true})
           }

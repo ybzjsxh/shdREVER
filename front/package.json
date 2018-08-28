@@ -52,7 +52,8 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "element-react": "^1.4.20",
-    "element-theme-default": "^1.4.13"
+    "element-theme-default": "^1.4.13",
+    "react-router-dom": "^4.3.1"
   },
   "jest": {
     "collectCoverageFrom": [
