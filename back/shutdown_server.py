@@ -63,7 +63,7 @@ def register():
 @app.route('/getAllDevice')
 def getAllDevice():
     if request.method == 'GET':
-        print request.headers.get('User-Agent')
+        # print request.headers.get('User-Agent')
         # print DEVICES
         # myLogger.info(DEVICES)
         return json.dumps(DEVICES)
