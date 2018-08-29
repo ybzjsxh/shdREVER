@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import {Button, Icon, Table, Tag} from 'element-react'
+import {Button, Icon, Table, Tag, Message} from 'element-react'
 import axios from 'axios';
 
 export default class Mbody extends Component {
@@ -9,6 +9,7 @@ export default class Mbody extends Component {
 
     this.state = {
       loading: false,
+      // value: true,
       columns: [
         {
           type: 'index',
@@ -44,6 +45,19 @@ export default class Mbody extends Component {
             return (
               <span>
                 <Button type="danger" size="small" loading={this.state.loading} onClick={this.closeDevice.bind(this, index)}><Icon name="delete2"/> 关闭此设备</Button>
+                {/*<Switch*/}
+                  {/*value={this.state.value}*/}
+                  {/*onText="ON"*/}
+                  {/*offText="OFF"*/}
+                  {/*onChange={*/}
+                    {/*(value)=>{*/}
+                    {/*this.setState({value: !value});*/}
+                    {/*setTimeout(()=>{*/}
+                      {/*this.closeDevice(index)*/}
+                    {/*}, 1000)*/}
+                  {/*}*/}
+                {/*}>*/}
+                {/*</Switch>*/}
                 <Button type="success" size="small" plain={true} disabled={true} onClick={this.clearDevice.bind(this, index)}><Icon name="close"/> 清除此IP</Button>
               </span>
             )
@@ -78,8 +92,11 @@ export default class Mbody extends Component {
         , 500)
       })
       .catch(error => {
+        Message({
+          type: 'error',
+          message: '请求失败！'
+        });
         console.log(error.message)
-        alert('请求出错！')
       })
   }
 

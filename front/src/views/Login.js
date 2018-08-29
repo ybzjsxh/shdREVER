@@ -5,7 +5,7 @@ import './Login.css';
 import axios from 'axios'
 
 
-import {Button, Input, Form, Layout, Alert} from 'element-react'
+import {Button, Input, Form, Layout, Alert, Message} from 'element-react'
 import 'element-theme-default';
 
 class Login extends Component {
@@ -25,12 +25,12 @@ class Login extends Component {
               callback(new Error('请输入密码'));
             } else {
               if (this.state.form.pass !== '') {
-                // this.refs.form.validateField('pass');
-                // console.log(this.refs.form)
+                // this.refs.form.validateField();
               }
               callback();
+              }
             }
-          } }
+          }
         ]
       }
     };
@@ -39,14 +39,6 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    // this.refs.form.validate((valid) => {
-    //   if (valid) {
-    //     alert('submit!');
-    //   } else {
-    //     console.log('error submit!!');
-    //     return false;
-    //   }
-    // });
     if(this.state.form.pass !== '') {
       axios.post('/login', {
         pass: this.state.form.pass
@@ -54,8 +46,8 @@ class Login extends Component {
         .then(response => {
           console.log(response.data);
           if (response.data.code === 1) {
-            console.log('logined')
             // window.location.href = 'http://localhost:8888/'
+            Message({type: 'success', message: '登录成功！'})
             this.props.history.push('/main')
           } else {
             this.setState({err1: true})
@@ -65,6 +57,7 @@ class Login extends Component {
           }
         })
         .catch(error => {
+          Message({type: 'error', message: '服务异常！'});
           console.log(error.message);
         })
     } else {
