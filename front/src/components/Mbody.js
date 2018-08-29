@@ -11,17 +11,20 @@ export default class Mbody extends Component {
       loading: false,
       columns: [
         {
-          type: 'index'
+          type: 'index',
+          fixed: 'left'
         },
         {
           label: "设备IP",
           prop: "ip",
+          align: "center",
+          sortable: true,
           // width: 120,
           render: function(data){
             return (
               <span>
                 <Icon name="share"/>
-                <span style={{marginLeft: '10px'}}>{data.ip}</span>
+                <span style={{marginLeft: '5px'}}>{data.ip}</span>
               </span>
             )
           }
@@ -29,7 +32,7 @@ export default class Mbody extends Component {
         {
           label: "设备名称",
           prop: "name",
-          // width: 80,
+          align: "center",
           render: function(data){
             return <Tag type="primary">{data.name}</Tag>
           }
@@ -69,7 +72,10 @@ export default class Mbody extends Component {
       }
     })
       .then(res=>{
-        this.setState({data: [...this.state.data]})
+        this.setState({loading: true, data: [...this.state.data]})
+        setTimeout(() => {
+          this.setState({loading: false})}
+        , 500)
       })
       .catch(error => {
         console.log(error.message)
@@ -97,7 +103,7 @@ export default class Mbody extends Component {
         .catch(err => {
           console.log(err.message);
         })
-    }, 5000)
+    }, 3000)
   }
 
   componentWillUnmount() {
@@ -111,7 +117,7 @@ export default class Mbody extends Component {
         columns={this.state.columns}
         data={this.state.data}
         border={true}
-        height={250}
+        // height={250} // 固定表头
         highlightCurrentRow={true}
         stripe={true}
         emptyText={'无设备连接'}

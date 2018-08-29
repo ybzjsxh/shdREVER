@@ -59,6 +59,9 @@ class Login extends Component {
             this.props.history.push('/main')
           } else {
             this.setState({err1: true})
+            setTimeout(() => {
+              this.setState({err1: false})
+            }, 3000)
           }
         })
         .catch(error => {
@@ -66,6 +69,9 @@ class Login extends Component {
         })
     } else {
       this.setState({err2: true})
+      setTimeout(() => {
+        this.setState({err2: false})
+      }, 3000)
     }
   }
   //
@@ -87,23 +93,22 @@ class Login extends Component {
         <Logo/>
         <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
           <Layout.Row justify="center" type="flex">
-            <Layout.Col span="12" xs="22" lg="10">
+            <Layout.Col span="12" xs="22" md="12" lg="10">
               {this.state.err1
                 ? <Alert title="密码错误" type="error" showIcon={true} onClose={()=>this.setState({err1: false})} closeText="晓得了:("/>
                 : null}
               {this.state.err2
                 ? <Alert title="请输入密码" type="error" showIcon={true} onClose={()=>this.setState({err2: false})} closeText="晓得了:("/>
                 : null}
-              <Form.Item label="请登录" labelPosition="left" prop="pass">
+              <Form.Item label="请登录" labelPosition="right" prop="pass">
                 <Input type="password" onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off"/>
               </Form.Item>
             </Layout.Col>
           </Layout.Row>
           <Layout.Row type="flex" justify="center">
-            <Layout.Col xs="24" md="14" lg="12">
+            <Layout.Col span="12" xs="22" md="12" lg="10">
             <Form.Item>
-              <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>登陆</Button>
-              {/*<Button type="success" plain="true" size="large" onClick={this.handleReset.bind(this)}>重置</Button>*/}
+              <Button type="primary" size="large" style={{"width": "100%"}} onClick={this.handleSubmit.bind(this)}>登陆</Button>
             </Form.Item>
             </Layout.Col>
           </Layout.Row>

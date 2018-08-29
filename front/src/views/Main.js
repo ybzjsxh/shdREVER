@@ -5,7 +5,7 @@ import Mbody from '../components/Mbody'
 
 import axios from 'axios'
 
-import {Button, Icon, Layout} from 'element-react'
+import {Button, Icon, Layout, MessageBox, Message} from 'element-react'
 import 'element-theme-default';
 
 class Main extends Component {
@@ -19,18 +19,41 @@ class Main extends Component {
   }
 
   closeAll() {
-    axios.get('/closeAll')
-      .then(res=>{
-        this.setState({data: Object.assign({}, {device: [res.data]})});
+    MessageBox.confirm("确定关闭所有设备吗？", "提示", {
+      type: 'warning'
+    })
+      .then(() => {
+        axios.get('/closeAll')
+          .then(res=>{
+            this.setState({data: Object.assign({}, {device: [res.data]})});
+            Message({
+              type: 'success',
+              message: '操作成功！'
+            })
+          })
+          .catch(error=>{
+            console.log(error.message);
+            Message({
+              type: 'error',
+              message: '服务异常！'
+            })
+          })
       })
-      .catch(error=>{
-        console.log(error.message);
+      .catch(() => {
+        Message({
+          type: 'info',
+          message: '已取消'
+        });
       })
   }
 
   setDevNum = (devNum)=>{
     this.setState({devNum: devNum})
   }
+
+  // componentWillUnmount() {
+  //   clearInterval(this.props.getAllDevice)
+  // }
 
   render() {
     return (
