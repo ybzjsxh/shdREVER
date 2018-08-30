@@ -7,12 +7,11 @@ app = Flask(__name__)
 DEVICES = []
 
 
-def checkCloseState(ip):
+def checkCloseState(ip, name):
     print DEVICES
-    ret = DEVICES[ip]
-    if ret == 0:
-        return False
-    return True
+    if {'ip': ip, 'name': name} in DEVICES:
+        return False  # exist do not shutdown
+    return True  # not exist
 
 
 @app.route('/')
@@ -33,7 +32,7 @@ def login():
         hpw = hashlib.md5(data['pass']).hexdigest()
         if hpw == '2e2d68cdf956ab08b44a7843b277d371':
             session['password'] = data['pass']
-            return '{"code":1}'
+            return '{"code": 200}'
         return 'wrong password'
     return 'get is the method'
 
@@ -43,21 +42,21 @@ def logout():
     if request.method == 'GET':
         # remove the username from the session if it's there
         session.pop('password', None)
-        return '{"code":0}'
+        return '{"code": 200}'
 
 
 @app.route('/register')
 def register():
     if request.method == 'GET':
         name = request.args.get('name').encode('ascii')
-        address = request.args.get('ip').encode('ascii')
-        if {"ip": address, "name": name, "state": 0} in DEVICES:
-            return json.dumps({'err':{'code': 500,'msg':"device already exist!"}})
+        ip = request.args.get('ip').encode('ascii')
+        if {"ip": ip, "name": name} in DEVICES:
+            return json.dumps({'code': 500, 'msg': "device already exist!"})
         else:
-            print 'register device: ', name, address
-            myLogger.info('register device: {0} {1}'.format(name, address))
-            DEVICES.append({"ip": address, "name": name, "state": 0})
-            return '{"code":1}'
+            print 'register device: ', name, ip
+            myLogger.info('register device: {0} {1}'.format(ip, name))
+            DEVICES.append({"ip": ip, "name": name})
+            return '{"code": 200}'
 
 
 @app.route('/getAllDevice')
@@ -85,7 +84,7 @@ def closeDevice():
         index = request.args.get('index').encode('ascii')
         for index in DEVICES:
             DEVICES.remove(index)
-            return '{"code":0}'
+            return '{"code": 200}'
 
 
 @app.route('/closeAll')
@@ -95,22 +94,23 @@ def closeAll():
         #     print 'close device='+i
         #     states[i] = 1
         # return '{"code":1}'
-        del DEVICES[:]
-        print DEVICES
+        if DEVICES != []:
+            del DEVICES[:]
+            print DEVICES
+            return '{"code": 200}'
 
-        return json.dumps(DEVICES)
+        return json.dumps({'code': 503, 'msg': "no device yet"})
 
 
 @app.route('/checkState')
 def checkState():
     if request.method == 'GET':
-        cip = request.args.get('ip')
-        print cip
-        if checkCloseState(cip) == False:
-            return json.dumps(DEVICES)
-        else:
-            del DEVICES[cip]
-            return '{"code":1}'
+        ip = request.args.get('ip').encode('ascii')
+        name = request.args.get('name').encode('ascii')
+
+        if checkCloseState(ip, name) == False:
+            return '{"code": 1}'
+        return '{"code": 0}'  # not exist, shutdown
 
 
 # @app.route('/logoutDevice')
