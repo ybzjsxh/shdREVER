@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import { HashRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Login from './views/Login'
 import Main from './views/Main'
 
 ReactDOM.render((
-  <HashRouter>
+  <BrowserRouter>
     <div>
-      <Route exact path="/" component={Login} />
-      <Route path="/main" component={Main} />
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route path="/main" component={Main} />
+        <Redirect to="/"/>
+      </Switch>
     </div>
-  </HashRouter>
+  </BrowserRouter>
 ), document.getElementById('root'));
 registerServiceWorker();

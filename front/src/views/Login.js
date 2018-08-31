@@ -45,7 +45,7 @@ class Login extends Component {
       })
         .then(response => {
           console.log(response.data);
-          if (response.data.code === 1) {
+          if (response.data.code === 200) {
             // window.location.href = 'http://localhost:8888/'
             Message({type: 'success', message: '登录成功！'})
             this.props.history.push('/main')
@@ -84,7 +84,7 @@ class Login extends Component {
     return (
       <div className="container">
         <Logo/>
-        <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm">
+        <Form ref="form" model={this.state.form} rules={this.state.rules} className="ruleForm" onSubmit={this.handleSubmit.bind(this)}>
           <Layout.Row justify="center" type="flex">
             <Layout.Col span="12" xs="22" md="12" lg="10">
               {this.state.err1
