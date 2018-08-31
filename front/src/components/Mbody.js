@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import {Button, Icon, Table, Tag, Message} from 'element-react'
+import {Button, Icon, Table, Tag, Message, Notification} from 'element-react'
 import axios from 'axios';
 
 export default class Mbody extends Component {
@@ -13,14 +13,13 @@ export default class Mbody extends Component {
       columns: [
         {
           type: 'index',
-          fixed: 'left'
+          fixed: 'left',
         },
         {
           label: "设备IP",
           prop: "ip",
           align: "center",
           sortable: true,
-          // width: 120,
           render: function(data){
             return (
               <span>
@@ -118,6 +117,12 @@ export default class Mbody extends Component {
           console.log(this.state.data)
         })
         .catch(err => {
+          Notification({
+            title: '警告',
+            message: "连接似乎异常！",
+            type: 'warning',
+            duration: 2000
+          });
           console.log(err.message);
         })
     }, 3000)

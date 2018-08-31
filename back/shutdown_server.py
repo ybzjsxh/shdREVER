@@ -83,7 +83,7 @@ def closeDevice():
         # return json.dumps('{"code":1}')
         try:
             index = int(request.args.get('index').encode('ascii'))
-            print index
+            print 'closing device in', index
             if DEVICES[index]:
                 myLogger.info('closing device: {0}'.format(DEVICES[index]))
                 del DEVICES[index]
