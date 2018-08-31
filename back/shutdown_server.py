@@ -32,7 +32,7 @@ def login():
         hpw = hashlib.md5(data['pass']).hexdigest()
         if hpw == '2e2d68cdf956ab08b44a7843b277d371':
             session['password'] = data['pass']
-            return '{"code": 200}'
+            return '{"code": 200, "msg": "logined"}'
         return 'wrong password'
     return 'get is the method'
 
@@ -56,7 +56,7 @@ def register():
             print 'register device: ', name, ip
             myLogger.info('register device: {0} {1}'.format(ip, name))
             DEVICES.append({"ip": ip, "name": name})
-            return '{"code": 200}'
+            return '{"code": 200, "msg": "register ok"}'
 
 
 @app.route('/getAllDevice')
@@ -81,10 +81,16 @@ def closeDevice():
         #     return json.dumps({'err':{'code': 404,'msg':"device not exist!"}})
         # print DEVICES
         # return json.dumps('{"code":1}')
-        index = request.args.get('index').encode('ascii')
-        for index in DEVICES:
-            DEVICES.remove(index)
-            return '{"code": 200}'
+        try:
+            index = int(request.args.get('index').encode('ascii'))
+            print index
+            if DEVICES[index]:
+                myLogger.info('closing device: {0}'.format(DEVICES[index]))
+                del DEVICES[index]
+                return '{"code": 200}'
+        except Exception, e:
+            myLogger.error(e)
+            return '{"code": 500, "msg": "InternalError"}'
 
 
 @app.route('/closeAll')
@@ -96,7 +102,7 @@ def closeAll():
         # return '{"code":1}'
         if DEVICES != []:
             del DEVICES[:]
-            print DEVICES
+            myLogger.info('closing all!')
             return '{"code": 200}'
 
         return json.dumps({'code': 503, 'msg': "no device yet"})
