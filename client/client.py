@@ -50,7 +50,7 @@ def checkState():
                 command = config[2].strip('\n')
                 os.popen(command)
             elif 'Linux' in name:
-                command = config[3].strip('\n')
+                command = config[3].strip('\r\n')
                 os.popen(command)
             else:
                 print 'bad name'
@@ -63,6 +63,6 @@ if __name__ == "__main__":
     name = config[1].strip('\n')
     myip = get_host_ip()
     register(myip, name)
-    time.sleep(5)
+    time.sleep(3)
     checkState()
 

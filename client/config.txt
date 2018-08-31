@@ -1,4 +1,4 @@
 localhost
-xxxx
+Windows
 "shutdown -s -t 60"
-sudo shutdown -h 1
+sudo shutdown -h +1
