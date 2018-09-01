@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.4"
@@ -15,6 +16,24 @@
   },
   "devDependencies": {
     "element-react": "^1.4.20",
-    "element-theme-default": "^1.4.13"
+    "element-theme-default": "^1.4.13",
+    "react-router-dom": "^4.3.1"
+  },
+  "proxy": {
+    "/index": {
+      "target": "http://localhost:8888"
+    },
+    "/login": {
+      "target": "http://localhost:8888"
+    },
+    "/getAllDevice": {
+      "target": "http://localhost:8888"
+    },
+    "/closeAll": {
+      "target": "http://localhost:8888"
+    },
+    "/closeDevice": {
+      "target": "http://localhost:8888"
+    }
   }
 }
