@@ -17,7 +17,8 @@ export default class Mbody extends Component {
         {
           label: "设备IP",
           prop: "ip",
-          // width: 120,
+          align: "center",
+          width: 300,
           render: function(data){
             return (
               <span>
@@ -31,6 +32,7 @@ export default class Mbody extends Component {
           label: "设备名称",
           prop: "name",
           align: "center",
+          width: 220,
           render: function(data){
             return <Tag type="primary">{data.name}</Tag>
           }
@@ -38,6 +40,7 @@ export default class Mbody extends Component {
         {
           label: "操作",
           prop: "execution",
+          width: 400,
           render: (row, column, index) => {
             return (
               <span>
