@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import {Button, Icon, Table, Tag, Message, Notification} from 'element-react'
 import axios from 'axios';
+// import '../mock/mockdata'
 
 export default class Mbody extends Component {
   constructor(props) {

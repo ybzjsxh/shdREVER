@@ -17,6 +17,8 @@
   "devDependencies": {
     "element-react": "^1.4.20",
     "element-theme-default": "^1.4.13",
+    "mockjs": "^1.0.1-beta3",
+    "qs-url": "^1.0.3",
     "react-router-dom": "^4.3.1"
   },
   "proxy": {

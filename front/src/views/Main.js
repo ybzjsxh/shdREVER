@@ -4,6 +4,7 @@ import Status from '../components/Status';
 import Mbody from '../components/Mbody'
 
 import axios from 'axios';
+// import '../mock/mockdata'
 
 import {Button, Icon, Layout, MessageBox, Message} from 'element-react'
 import 'element-theme-default';
