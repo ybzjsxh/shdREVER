@@ -4,6 +4,8 @@ import {Button, Icon, Table, Tag, Message, Notification} from 'element-react'
 import axios from 'axios';
 // import '../mock/mockdata'
 
+import NProgress from 'nprogress'
+
 export default class Mbody extends Component {
   constructor(props) {
     super(props);
@@ -89,6 +91,10 @@ export default class Mbody extends Component {
     this.setState({data: [...this.state.data]});
   }
 
+  componentWillMount() {
+    NProgress.start()
+  }
+
   componentDidMount() {
     this.getAllDevice = setInterval(() => {
       axios.get('/getAllDevice', {
@@ -99,6 +105,7 @@ export default class Mbody extends Component {
           this.setState({data: Object.assign([], res.data)});
           this.props.setDevNum(res.data.length);
           console.log(this.state.data);
+          NProgress.done()
         })
         .catch(err => {
           Notification({
@@ -108,6 +115,7 @@ export default class Mbody extends Component {
             duration: 2000
           });
           console.log(err.message);
+          NProgress.done()
         })
     }, 3000)
   }

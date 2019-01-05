@@ -5,6 +5,8 @@ import './Login.css';
 import axios from 'axios';
 // import '../mock/mockdata'
 
+import Nprogress from 'nprogress'
+
 
 import {Button, Input, Form, Layout, Alert, Message} from 'element-react'
 import 'element-theme-default';
@@ -35,6 +37,15 @@ class Login extends Component {
         ]
       }
     };
+  }
+
+  componentWillMount() {
+    Nprogress.start();
+  }
+  componentDidMount() {
+    setTimeout(()=>{
+      Nprogress.done();
+    }, 2000)
   }
 
   handleSubmit(e) {
