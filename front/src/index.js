@@ -7,6 +7,9 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import Login from './views/Login'
 import Main from './views/Main'
 
+// import Nprogress from 'nprogress'
+import '../node_modules/nprogress/nprogress.css'
+
 ReactDOM.render((
   <BrowserRouter>
     <div>
