@@ -1,0 +1,40 @@
+.header {
+  position: fixed;
+  /* bottom: 0; */
+  top: 0;
+  height: 50px;
+  width: 100%;
+  background: #0062f5;
+  color: white;
+  font-size: 36px;
+}
+.header .msg-title {
+  background: #0062f5;
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  padding: 0 10px;
+}
+
+.header .msg-body {
+  animation: move 20s linear infinite;
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+}
+
+.header .msg-body::after {
+  content: ' ' attr(data-msg);
+  overflow: hidden;
+}
+
+@keyframes move {
+  0%{
+    transform: translate(100%)
+  }
+  100%{
+    transform: translate(-100%);
+  }
+}

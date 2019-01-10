@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
-import Header from '../components/Header'
+import React, { Component } from 'react';
+import Header from '../components/Header';
 import Status from '../components/Status';
-import Mbody from '../components/Mbody'
+import Mbody from '../components/Mbody';
+import MsgTip from '../components/MsgTip';
 
 import axios from 'axios';
-// import '../mock/mockdata'
+import '../mock/mockdata'
 
 import {Button, Icon, Layout, MessageBox, Message} from 'element-react'
 import 'element-theme-default';
@@ -14,7 +15,8 @@ class Main extends Component {
     super(props)
     this.state = {
       devNum: 0,
-      data: props.data
+      data: props.data,
+      msg: 'Welcome aboard ~'
     }
   }
 
@@ -54,6 +56,11 @@ class Main extends Component {
   render() {
     return (
       <div>
+        <Layout.Row type="flex" justify="center"> 
+          <Layout.Col span="24" xs="24" md="24" lg="24">
+            <MsgTip msg={this.state.msg}/>
+          </Layout.Col>
+        </Layout.Row>
         <Layout.Row justify="center" type="flex">
           <Layout.Col span="12" xs="24" md="16" lg="12">
             <Header />

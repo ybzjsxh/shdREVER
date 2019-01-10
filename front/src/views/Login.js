@@ -3,8 +3,6 @@ import Logo from '../components/Logo'
 import './Login.css';
 
 import axios from 'axios';
-// import '../mock/mockdata'
-
 
 import {Button, Input, Form, Layout, Alert, Message} from 'element-react'
 import 'element-theme-default';
