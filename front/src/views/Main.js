@@ -5,7 +5,7 @@ import Mbody from '../components/Mbody';
 import MsgTip from '../components/MsgTip';
 
 import axios from 'axios';
-import '../mock/mockdata'
+// import '../mock/mockdata'
 
 import {Button, Icon, Layout, MessageBox, Message} from 'element-react'
 import 'element-theme-default';

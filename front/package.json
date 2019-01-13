@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-scripts": "1.1.4",
-    "nprogress": "^0.2.0"
+    "nprogress": "^0.2.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -16,7 +16,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "element-react": "^1.4.20",
+    "element-react": "^1.4.26",
     "element-theme-default": "^1.4.13",
     "mockjs": "^1.0.1-beta3",
     "qs-url": "^1.0.3",
