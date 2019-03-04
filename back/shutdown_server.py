@@ -7,9 +7,9 @@ app = Flask(__name__)
 DEVICES = []
 
 
-def checkCloseState(ip, name):
+def checkCloseState(ip, name, mac):
     print DEVICES
-    if {"ip": ip, "name": name} in DEVICES:
+    if {"ip": ip, "name": name, "mac": mac} in DEVICES:
         return False  # exist do not shutdown
     return True  # not exist
 
@@ -50,12 +50,13 @@ def register():
     if request.method == 'GET':
         name = request.args.get('name').encode('ascii')
         ip = request.args.get('ip').encode('ascii')
-        if {"ip": ip, "name": name} in DEVICES:
+        mac = request.args.get('mac').encode('ascii')
+        if {"ip": ip, "name": name, "mac": mac} in DEVICES:
             return json.dumps({'code': 500, 'msg': 'device already exist!'})
         else:
-            print 'register device: ', name, ip
-            myLogger.info('register device: {0} {1}'.format(ip, name))
-            DEVICES.append({"ip": ip, "name": name})
+            print 'register device: ', name, ip, mac
+            myLogger.info('register device: {0} {1}'.format(ip, name, mac))
+            DEVICES.append({"ip": ip, "name": name, "mac": mac})
             return '{"code": 200, "msg": "register ok"}'
 
 
@@ -98,8 +99,9 @@ def checkState():
     if request.method == 'GET':
         ip = request.args.get('ip').encode('ascii')
         name = request.args.get('name').encode('ascii')
+        mac = request.args.get('mac').encode('ascii')
 
-        if checkCloseState(ip, name) == False:
+        if checkCloseState(ip, name, mac) == False:
             return '{"code": 1}'
         return '{"code": 0}'  # not exist, shutdown
 

@@ -7,18 +7,25 @@ Mock.mock('/login', 'post', {
     msg: "logined"
 })
 
+let s1, mac
+s1 = Random.string('upper', 6)+Random.string('number', 6)
+mac = s1.replace(/(..)/g, '$1-')
+
 Mock.mock('/getAllDevice', [
     {
       'ip': Random.ip(),
-      'name': Random.name()
+      'name': Random.name(),
+      'mac': mac
     },
     {
       'ip': Random.ip(),
-      'name': Random.name()
+      'name': Random.name(),
+      'mac': mac
     },
     {
       'ip': Random.ip(),
-      'name': Random.name()
+      'name': Random.name(),
+      'mac': mac
     },
   ]
 )

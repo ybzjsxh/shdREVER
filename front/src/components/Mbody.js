@@ -18,10 +18,19 @@ export default class Mbody extends Component {
           fixed: 'left'
         },
         {
+          label: "设备名称",
+          prop: "name",
+          align: "center",
+          width: 220,
+          render: function(data){
+            return <Tag type="primary">{data.name}</Tag>
+          }
+        },
+        {
           label: "设备IP",
           prop: "ip",
           align: "center",
-          width: 300,
+          width: 180,
           render: function(data){
             return (
               <span>
@@ -32,12 +41,17 @@ export default class Mbody extends Component {
           }
         },
         {
-          label: "设备名称",
-          prop: "name",
+          label: "Mac地址",
+          prop: "mac",
           align: "center",
-          width: 220,
-          render: function(data){
-            return <Tag type="primary">{data.name}</Tag>
+          width: 200,
+          render: function(data) {
+            return (
+              <span>
+                <Icon name="check"/>
+                <span style={{marginLeft: '2px'}}>{data.mac}</span>
+              </span>
+            )
           }
         },
         {
@@ -48,6 +62,7 @@ export default class Mbody extends Component {
             return (
               <span>
                 <Button type="danger" size="small" loading={this.state.loading} onClick={this.closeDevice.bind(this, index)}><Icon name="delete2"/> 关闭此设备</Button>
+                <Button type="success" size="small" onClick={this.wakeDevice.bind(this, index)}><Icon name="circle-check"/> 开启此设备</Button>
                 <Button type="success" size="small" plain={true} disabled={true} onClick={this.clearDevice.bind(this, index)}><Icon name="close"/> 清除此IP</Button>
               </span>
             )
@@ -89,6 +104,27 @@ export default class Mbody extends Component {
   clearDevice(index) {
     this.state.data.splice(index, 1);
     this.setState({data: [...this.state.data]});
+  }
+
+  wakeDevice(index) {
+    axios.get('/wakeDevice', {
+      params: {
+        index
+      }
+    })
+      .then(res => {
+        this.setState({loading: true, data: [...this.state.data]});
+        setTimeout(() => {
+          this.setState({loading: false});
+        }, 500)
+      })
+      .catch(err => {
+        Message({
+          type: 'error',
+          message: '请求失败！'
+        });
+        console.log(err.message);
+      })
   }
 
   componentWillMount() {
