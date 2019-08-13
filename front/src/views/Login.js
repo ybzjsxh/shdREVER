@@ -5,7 +5,7 @@ import './Login.css';
 import axios from 'axios';
 
 import Nprogress from 'nprogress'
-
+// import '../mock'
 
 import {Button, Input, Form, Layout, Alert, Message} from 'element-react'
 import 'element-theme-default';

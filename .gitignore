@@ -2,6 +2,10 @@
 
 # dependencies
 front/node_modules
+front_reb/node_modules
+back_node/node_modules
+client_node/node_modules
+back_node/build
 
 # testing
 /coverage
@@ -23,5 +27,5 @@ yarn-error.log*
 /.vscode
 /.idea
 front/build
-*.log
+*.log*
 *.pyc

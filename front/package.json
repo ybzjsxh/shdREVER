@@ -1,13 +1,16 @@
 {
   "name": "shdrever",
-  "version": "0.1.0",
+  "version": "2.5.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "0.19.0",
+    "element-react": "^1.4.34",
+    "element-theme-default": "^1.4.13",
     "nprogress": "^0.2.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-scripts": "1.1.4"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^2.1.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -16,27 +19,15 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "element-react": "^1.4.26",
-    "element-theme-default": "^1.4.13",
     "mockjs": "^1.0.1-beta3",
-    "qs-url": "^1.0.3",
-    "react-router-dom": "^4.3.1"
+    "qs-url": "^1.0.4",
+    "react-hot-loader": "^4.11.1"
   },
-  "proxy": {
-    "/index": {
-      "target": "http://localhost:8888"
-    },
-    "/login": {
-      "target": "http://localhost:8888"
-    },
-    "/getAllDevice": {
-      "target": "http://localhost:8888"
-    },
-    "/closeAll": {
-      "target": "http://localhost:8888"
-    },
-    "/closeDevice": {
-      "target": "http://localhost:8888"
-    }
-  }
+  "proxy": "http://localhost:8888",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
