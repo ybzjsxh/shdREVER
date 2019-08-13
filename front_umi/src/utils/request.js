@@ -3,7 +3,7 @@ import axios from 'axios';
 // 设置超时时间
 axios.defaults.timeout = 10000;
 // post请求头
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
 //对外接口
 export default function request({ method, url, params }) {

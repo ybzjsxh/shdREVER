@@ -24,10 +24,12 @@ export default {
           params: payload,
         }),
       );
-      if (data) {
+      if (data.code == 200) {
         yield put({ type: 'signin' });
         message.success('登陆成功');
         router.push('/main');
+      } else {
+        message.error(data.msg)
       }
     },
   },
