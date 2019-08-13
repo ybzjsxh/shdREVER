@@ -10,7 +10,7 @@ const {svr_ip, svr_port, name} = config;
 let socket = io(`ws://${svr_ip}:${svr_port}`)
 
 const get_host_ip_mac = () => {
-  add = os.networkInterfaces();
+  let add = os.networkInterfaces();
   for (var devName in add) {
     // console.log(devName);
     if(devName==='WLAN' || devName==='en0') {
@@ -28,11 +28,6 @@ const get_host_ip_mac = () => {
 // get_host_ip_mac()
 
 const register = async (ip, name, mac) => {
-  // let { ip, mac } = get_host_ip_mac()
-  // console.log(ip, mac);
-  // url = `http://${svr_ip}:${svr_port}/register?ip=${ip}&name=${name}&mac=${mac}`
-  // console.log(url);
-  // axios.get(url).then(msg=>msg.data).catch(err=>err)
   socket.emit('online', {
     ip, name, mac
   })
