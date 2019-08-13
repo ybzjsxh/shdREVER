@@ -1,15 +1,42 @@
 from flask import Flask, session, redirect, url_for, escape, request, render_template, json
 import hashlib
 from myLogger import myLogger
+from wakeOnLan import wakeOnLan
+import sqlite3
 
 app = Flask(__name__)
 
 DEVICES = []
 
+DB = './device.db'
 
-def checkCloseState(ip, name):
+
+# def dbInit():
+#     cx = sqlite3.connect("./device.db")
+#     cur = cx.cursor()
+#     sql = """CREATE TABLE device (
+#         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+#         ip TEXT NOT NULL,
+#         name TEXT NOT NULL,
+#         mac TEXT NOT NULL,
+#         close INTEGER NOT NULL);
+#         """
+#     cur.execute(sql)
+#     cur.close()
+
+def checkDevice(ip, mac):
+    cx = sqlite3.connect(DB)
+    cur = cx.cursor()
+    sql = 'SELECT ip FROM device WHERE ip = "{0}" AND mac = "{1}"'.format(ip, mac)
+    cur.execute(sql)
+    if cur.fetchall() == []:
+        return False
+    return True
+
+
+def checkCloseState(ip, name, mac, close):
     print DEVICES
-    if {"ip": ip, "name": name} in DEVICES:
+    if {"ip": ip, "name": name, "mac": mac, "close": close} in DEVICES:
         return False  # exist do not shutdown
     return True  # not exist
 
@@ -30,11 +57,12 @@ def login():
         # print json.loads(request.data)
         data = json.loads(request.data)
         hpw = hashlib.md5(data['pass']).hexdigest()
-        if hpw == '2e2d68cdf956ab08b44a7843b277d371':
+        # if hpw == '2e2d68cdf956ab08b44a7843b277d371':
+        if hpw == 'a6ec51f044f37104dbef3a539673b78f':
             session['password'] = data['pass']
-            return '{"code": 200, "msg": "logined"}'
-        return 'wrong password'
-    return 'get is the method'
+            return json.dumps({"code": 200, "msg": "logined"})
+        return json.dumps({"code": 503, "msg": 'wrong password'})
+    return json.dumps({"code": 500, "msg": 'wrong method'})
 
 
 @app.route('/logout')
@@ -50,14 +78,29 @@ def register():
     if request.method == 'GET':
         name = request.args.get('name').encode('ascii')
         ip = request.args.get('ip').encode('ascii')
-        if {"ip": ip, "name": name} in DEVICES:
+        mac = request.args.get('mac').encode('ascii')
+        cx = sqlite3.connect(DB)
+        cur = cx.cursor()
+        if checkDevice(ip, mac):
             return json.dumps({'code': 500, 'msg': 'device already exist!'})
         else:
-            print 'register device: ', name, ip
-            myLogger.info('register device: {0} {1}'.format(ip, name))
-            DEVICES.append({"ip": ip, "name": name})
-            return '{"code": 200, "msg": "register ok"}'
+            sql = 'INSERT INTO device VALUES (null,"{0}","{1}","{2}",0)'.format(ip, name, mac)
+            cur.execute(sql)
+            cx.commit()
+            cur.close()
+            cx.close()
+            print 'register device: ', name, ip, mac
+            myLogger.info('register device: {0} {1} {2}'.format(ip, name, mac))
+            return json.dumps({"code": 200, "msg": "register ok"})
+    return json.dumps({"code": 500, "msg": 'wrong method'})
 
+
+# transfer dict into json
+def dict_fac(cur, row):
+    d = {}
+    for index, col in enumerate(cur.description):
+        d[col[0]] = row[index]
+    return d
 
 @app.route('/getAllDevice')
 def getAllDevice():
@@ -65,32 +108,78 @@ def getAllDevice():
         # print request.headers.get('User-Agent)
         # print DEVICES
         # myLogger.info(DEVICES)
-        return json.dumps(DEVICES)
+        cx = sqlite3.connect(DB)
+        cx.row_factory = dict_fac
+        cur = cx.cursor()
+        sql = 'SELECT * FROM device'
+        cur.execute(sql)
+        DEVICES = cur.fetchall()
+        cur.close()
+        cx.close()
+        return json.dumps({'code': 200, 'msg': 'ok', 'data': DEVICES})
 
 
 @app.route('/closeDevice')
 def closeDevice():
     if request.method == 'GET':
         try:
-            index = int(request.args.get('index').encode('ascii'))
-            print 'closing device at', index
-            if DEVICES[index]:
-                myLogger.info('closing device: {0}'.format(DEVICES[index]))
-                del DEVICES[index]
-                return '{"code": 200}'
+            ip = request.args.get('ip').encode('ascii')
+            name = request.args.get('name').encode('ascii')
+            print 'closing device ', name
+            if 1:
+                cx = sqlite3.connect(DB)
+                cur = cx.cursor()
+                sql = 'UPDATE device SET close = 1 WHERE ip = "{0}"'.format(ip)
+                cur.execute(sql)
+                cx.commit()
+                cur.close()
+                cx.close()
+                myLogger.info('closing device: {0}'.format(name))
+                return json.dumps({"code": 200, "msg": "ok"})
         except Exception, e:
             myLogger.error(e)
-            return '{"code": 500, "msg": "InternalError"}'
+            return json.dumps({"code": 500, "msg": "InternalError"})
+    return json.dumps({"code": 500, "msg": 'wrong method'})
 
 
 @app.route('/closeAll')
 def closeAll():
     if request.method == 'GET':
-        if DEVICES != []:
-            del DEVICES[:]
+        if 1:
+            cx = sqlite3.connect(DB)
+            cur = cx.cursor()
+            sql = 'UPDATE device SET close = 1'
+            cur.execute(sql)
+            cx.commit()
+            cur.close()
+            cx.close()
             myLogger.info('closing all!')
-            return '{"code": 200}'
+            return json.dumps({"code": 200, "msg": "ok"})
         return json.dumps({'code': 503, 'msg': 'no device yet'})
+    return json.dumps({"code": 500, "msg": 'wrong method'})
+
+
+@app.route('/clearDevice')
+def clearDevice():
+    if request.method == 'GET':
+        try:
+            ip = request.args.get('ip').encode('ascii')
+            name = request.args.get('name').encode('ascii')
+            print 'clearing device ', name
+            if 1:
+                myLogger.info('clearing device: {0}'.format(name))
+                cx = sqlite3.connect(DB)
+                cur = cx.cursor()
+                sql = 'DELETE FROM device where ip = "{0}"'.format(ip)
+                cur.execute(sql)
+                cx.commit()
+                cur.close()
+                cx.close()
+                return json.dumps({"code": 200, "msg": "ok"})
+        except Exception, e:
+            myLogger.error(e)
+            return json.dumps({"code": 500, "msg": "InternalError"})
+    return json.dumps({"code": 500, "msg": 'wrong method'})
 
 
 @app.route('/checkState')
@@ -98,10 +187,38 @@ def checkState():
     if request.method == 'GET':
         ip = request.args.get('ip').encode('ascii')
         name = request.args.get('name').encode('ascii')
+        mac = request.args.get('mac').encode('ascii')
+        close = request.args.get('close').encode('ascii')
 
-        if checkCloseState(ip, name) == False:
-            return '{"code": 1}'
-        return '{"code": 0}'  # not exist, shutdown
+        if not checkCloseState(ip, name, mac, close):
+            return json.dumps({"code": 1})
+        return json.dumps({"code": 0})  # not exist, shutdown
+    return json.dumps({"code": 500, "msg": 'wrong method'})
+
+
+@app.route('/wakeDevice')
+def wakeDevice():
+    if request.method == 'GET':
+        try:
+            ip = request.args.get('ip').encode('ascii')
+            name = request.args.get('name').encode('ascii')
+            raw_mac = request.args.get('mac').encode('ascii')
+            mac = wakeOnLan.format_mac(raw_mac)
+            send_data = wakeOnLan.create_magic_packet(mac)
+            wakeOnLan.send_magic_packet(send_data)
+            cx = sqlite3.connect(DB)
+            cur = cx.cursor()
+            sql = 'UPDATE device SET close = 0 where ip = "{0}"'.format(ip)
+            cur.execute(sql)
+            cx.commit()
+            cur.close()
+            cx.close()
+            myLogger.info('waking device {0}'.format(name))
+            return json.dumps({"code": 200, "mac": mac})
+        except Exception, e:
+            print e
+            myLogger.error(e)
+            return json.dumps({"code": 500, "msg": str(e)})
 
 
 # set the secret key.  keep this really secret:

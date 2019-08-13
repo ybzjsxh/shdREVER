@@ -4,12 +4,16 @@ import urllib
 import urllib2
 import time
 import os
+import uuid
 
 svrIp = ''
 config = []
 url = ''
 SVR_PORT = 8888
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"}
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/51.0.2704.103 Safari/537.36"}
+
+print headers
 
 
 def readConfig():
@@ -19,8 +23,8 @@ def readConfig():
     f.close()
 
 
-def register(ip, name):
-    url = 'http://'+svrIp.strip('\n')+':'+str(SVR_PORT)+'/register?name='+name+'&ip='+ip
+def register(ip, name, mac):
+    url = 'http://'+svrIp.strip('\n')+':'+str(SVR_PORT)+'/register?name='+name+'&ip='+ip+'&mac='+mac
     print url
     request = urllib2.Request(url, headers=headers)
     response = urllib2.urlopen(request)
@@ -37,8 +41,18 @@ def get_host_ip():
     return ip
 
 
+def get_host_mac():
+    try:
+        uid = uuid.UUID(int=uuid.getnode()).hex[-12:]
+        mac = ':'.join([uid[i:i + 2] for i in range(0, 11, 2)])
+        print mac
+        return mac
+    except Exception, e:
+        raise ValueError('Maybe argument error ', e)
+
+
 def checkState():
-    url = 'http://'+svrIp.strip('\n')+':'+str(SVR_PORT)+'/checkState?name='+name+'&ip='+ip
+    url = 'http://'+svrIp.strip('\n')+':'+str(SVR_PORT)+'/checkState?name='+name+'&ip='+ip+'&mac='+mac
     while True:
         request = urllib2.Request(url, headers=headers)
         response = urllib2.urlopen(request)
@@ -63,7 +77,8 @@ if __name__ == "__main__":
     svrIp = config[0].strip('\n')
     name = config[1].strip('\n')
     ip = get_host_ip()
-    register(ip, name)
+    mac = get_host_mac()
+    register(ip, name, mac)
     time.sleep(3)
     checkState()
 

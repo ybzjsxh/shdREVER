@@ -5,16 +5,18 @@ import Mbody from '../components/Mbody';
 import MsgTip from '../components/MsgTip';
 
 import axios from 'axios';
-// import '../mock/mockdata'
+// import '../mock'
 
 import {Button, Icon, Layout, MessageBox, Message} from 'element-react'
 import 'element-theme-default';
 
 class Main extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       devNum: 0,
+      closeNum: 0,
+      awakeNum: 0,
       data: props.data,
       msg: 'Welcome aboard ~'
     }
@@ -51,7 +53,15 @@ class Main extends Component {
 
   setDevNum = (devNum) => {
     this.setState({devNum: devNum})
-  }
+  };
+
+  setCloseNum = closeNum => {
+    this.setState({closeNum: closeNum})
+  };
+
+  setAwakeNum = awakeNum => {
+    this.setState({awakeNum: awakeNum})
+  };
 
   render() {
     return (
@@ -73,12 +83,12 @@ class Main extends Component {
         </Layout.Row>
         <Layout.Row justify="center" type="flex">
           <Layout.Col span="12" xs="24" md="16" lg="12">
-            <Status devNum={this.state.devNum}/>
+            <Status devNum={this.state.devNum} closeNum={this.state.closeNum} awakeNum={this.state.awakeNum} />
           </Layout.Col>
         </Layout.Row>
         <Layout.Row justify="center" type="flex">
           <Layout.Col span="24" xs="24" md="16" lg="12">
-            <Mbody setDevNum={this.setDevNum.bind(this)}/>
+            <Mbody setDevNum={this.setDevNum.bind(this)} setCloseNum={this.setCloseNum.bind(this)} setAwakeNum={this.setAwakeNum.bind(this)}/>
           </Layout.Col>
         </Layout.Row>
       </div>
