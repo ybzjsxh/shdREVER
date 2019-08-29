@@ -9,6 +9,7 @@
     "nprogress": "^0.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.12.12",
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.1.0"
   },
@@ -16,12 +17,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cy:open": "cypress open"
   },
   "devDependencies": {
-    "mockjs": "^1.0.1-beta3",
-    "qs-url": "^1.0.4",
-    "react-hot-loader": "^4.11.1"
+    "cypress": "^3.4.1",
+    "mockjs": "^1.0.1-beta3"
   },
   "proxy": "http://localhost:8888",
   "browserslist": [

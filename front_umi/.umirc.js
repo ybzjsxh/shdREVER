@@ -24,6 +24,10 @@ export default {
       },
     ],
   ],
+  // chainWebpack(config) {
+  //   config.plugin('webpack-bundle-analyzer')
+  //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+  // },
   proxy: {
     '/api': {
       target: 'http://localhost:8888',
