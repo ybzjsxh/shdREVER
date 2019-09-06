@@ -16,9 +16,9 @@
 - lib: antd, umi
 - state_management: dva
 
-## back: python 2.7
+## back: python <del>2.7</del> 3.6
 
-- lib: flask
+- lib: flask, flask_jwt_extended
 - toStart:
   1. `pip install -r requirements.txt`
   2. `python shutdown.py`

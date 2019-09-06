@@ -16,6 +16,7 @@ class Login extends Component {
     this.state = {
       err1: false, // 密码错误
       err2: false, // 密码为空
+      type: false,
       form: {
         pass: ''
       },
@@ -38,7 +39,7 @@ class Login extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     Nprogress.start();
   }
   componentDidMount() {
@@ -55,10 +56,11 @@ class Login extends Component {
         pass: this.state.form.pass
       })
         .then(response => {
-          console.log(response.data);
-          if (response.data.code === 200) {
+          console.log(response);
+          if (response.status === 200 && response.data.status ) {
             // window.location.href = 'http://localhost:8888/'
             Message({type: 'success', message: '登陆成功！'});
+            localStorage.setItem('req_token', response.data.data)
             this.props.history.push('/main');
           } else {
             this.setState({err1: true});
@@ -68,6 +70,7 @@ class Login extends Component {
           }
         })
         .catch(err => {
+          console.log(err);
           Message({type: 'error', message: '服务异常！'});
           console.log(err.message);
         })
@@ -91,6 +94,12 @@ class Login extends Component {
     });
   }
 
+  handleClear() {
+    this.setState(prevState=>({
+      type: !prevState.type
+    }))
+  }
+  
   render() {
       return (
           <div className="container">
@@ -107,7 +116,7 @@ class Login extends Component {
                     : null
                   }
                   <Form.Item label="请登录" prop="pass">
-                    <Input type="password" onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off"/>
+                    <Input type={this.state.type ? 'text': 'password'} onChange={this.onChange.bind(this, 'pass')} placeholder="请输入密码" autoComplete="off" icon="view" onIconClick={this.handleClear.bind(this)}/>
                   </Form.Item>
                 </Layout.Col>
               </Layout.Row>

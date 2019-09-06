@@ -33,7 +33,7 @@ class Content extends React.Component {
       align: 'center',
       width: 100,
       fixed: 'left',
-      filters: [{ text: '在线', value: 0 }, { text: '离线', value: 1 }],
+      filters: [{ text: '在线', value: false }, { text: '离线', value: true }],
       onFilter: (value, record) => record.close === value,
       render: (text, record) => <Tag color="#2db7f5">{text}</Tag>,
     },

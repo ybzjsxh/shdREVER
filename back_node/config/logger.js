@@ -6,7 +6,7 @@ log4js.configure({
   appenders: {
     net: {
       type: 'dateFile',
-      pattern: '-yyyy-MM-dd.log',
+      pattern: 'yyMMdd',
       filename: path.join(__dirname, '../logs/', 'net.log')
     },
     out: {

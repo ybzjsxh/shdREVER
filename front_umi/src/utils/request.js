@@ -18,7 +18,7 @@ export default function request({ method, url, params }) {
 function get(url, params) {
   return new Promise((resolve, reject) => {
     axios
-      .get(url, params)
+      .get(url, { params })
       .then(res => {
         resolve(res.data);
       })

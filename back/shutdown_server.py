@@ -3,9 +3,22 @@ import hashlib
 from myLogger import myLogger
 from wakeOnLan import wakeOnLan
 import sqlite3
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+import common
 
 app = Flask(__name__)
 
+app.config['JWT_SECRET_KEY'] = 'jose'  # token
+
+def authenticate(pw):
+    hpw = hashlib.md5(pw).hexdigest()
+    if hpw == 'a6ec51f044f37104dbef3a539673b78f':
+        return hpw
+    return False
+
+
+# 注册JWT
+jwt = JWTManager(app)
 DEVICES = []
 
 DB = './device.db'
@@ -27,7 +40,8 @@ DB = './device.db'
 def checkDevice(ip, mac):
     cx = sqlite3.connect(DB)
     cur = cx.cursor()
-    sql = 'SELECT ip FROM device WHERE ip = "{0}" AND mac = "{1}"'.format(ip, mac)
+    sql = 'SELECT ip FROM device WHERE ip = "{0}" AND mac = "{1}"'.format(
+        ip, mac)
     cur.execute(sql)
     if cur.fetchall() == []:
         return False
@@ -51,18 +65,20 @@ def index():
         return render_template('index.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
-        # print json.loads(request.data)
-        data = json.loads(request.data)
-        hpw = hashlib.md5(data['pass']).hexdigest()
+        # if not request.is_json:
+        #     return jsonify({"msg": "Missing JSON in request"}), 400
+        print(request.data)
+        data = (request.get_json())['pass'].encode('utf8')
+        print(data)
         # if hpw == '2e2d68cdf956ab08b44a7843b277d371':
-        if hpw == 'a6ec51f044f37104dbef3a539673b78f':
-            session['password'] = data['pass']
-            return json.dumps({"code": 200, "msg": "logined"})
-        return json.dumps({"code": 503, "msg": 'wrong password'})
-    return json.dumps({"code": 500, "msg": 'wrong method'})
+        if authenticate(data):
+            access_token = create_access_token(auth="auto")
+            return jsonify(common.trueReturn(access_token, 'logined')), 200
+        return jsonify(common.falseReturn('', 'wrong password')), 403
+    return jsonify(common.falseReturn('', 'wrong method')), 403
 
 
 @app.route('/logout')
@@ -84,7 +100,8 @@ def register():
         if checkDevice(ip, mac):
             return json.dumps({'code': 500, 'msg': 'device already exist!'})
         else:
-            sql = 'INSERT INTO device VALUES (null,"{0}","{1}","{2}",0)'.format(ip, name, mac)
+            sql = 'INSERT INTO device VALUES (null,"{0}","{1}","{2}",0)'.format(
+                ip, name, mac)
             cur.execute(sql)
             cx.commit()
             cur.close()
@@ -101,6 +118,7 @@ def dict_fac(cur, row):
     for index, col in enumerate(cur.description):
         d[col[0]] = row[index]
     return d
+
 
 @app.route('/getAllDevice')
 def getAllDevice():
@@ -145,7 +163,9 @@ def closeDevice():
 @app.route('/closeAll')
 def closeAll():
     if request.method == 'GET':
-        if 1:
+        jwt = get_jwt_identity()
+        print(jwt)
+        if jwt:
             cx = sqlite3.connect(DB)
             cur = cx.cursor()
             sql = 'UPDATE device SET close = 1'
@@ -154,9 +174,9 @@ def closeAll():
             cur.close()
             cx.close()
             myLogger.info('closing all!')
-            return json.dumps({"code": 200, "msg": "ok"})
-        return json.dumps({'code': 503, 'msg': 'no device yet'})
-    return json.dumps({"code": 500, "msg": 'wrong method'})
+            return jsonify({"code": 200, "msg": "ok"})
+        return jsonify(common.falseReturn('', 'need jwt_token'))
+    return jsonify(common.falseReturn('', 'wrong method'))
 
 
 @app.route('/clearDevice')

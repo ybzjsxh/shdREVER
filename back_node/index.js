@@ -13,14 +13,12 @@ const server = require('http').createServer(app.callback())
 const io = require('socket.io')(server)
 
 const controller = require('./controller')
-const axios = require('axios')
-
 
 const port = process.env.port || 8888;
 
 app.use(koabody())
 
-app.use(serve(path.resolve(__dirname, 'build')))
+app.use(serve(path.resolve(__dirname, 'dist')))
 router.post('/login', routes.login)
   // .get('/register', routes.register)
   .get('/getAllDevice', routes.getAllDevice)
@@ -32,70 +30,34 @@ router.post('/login', routes.login)
 
 app.use(router.routes());
 
-
-let onlineDevice = {}
-
 io.on('connection', socket => {
-  console.log(socket.id);
-  socket.emit('print', {
-    id: socket.id
-  })
+  socket.join(socket.id);
+  console.log(io.sockets.adapter.rooms);
   socket.on('register', async data => {
     let { ip, name, mac } = data;
     let check = await controller.checkDevice(ip, name)
-    console.log('onlineDevice: ', onlineDevice);
     if ( check ) {
       console.log(`already exist, awaking now, new sid: ${socket.id}`);
-      onlineDevice[name] = socket.id
-      console.log('onlineDevice: ', onlineDevice);
       controller.awakeDevice(ip, name, mac, socket.id)
     } else {
       console.log(`register device ${data.name}`);
-      onlineDevice[name] = socket.id
-      console.log('onlineDevice: ', onlineDevice);
       controller.register(ip, name, mac, socket.id)
     }
   })
-  // socket.on('getAllDevice', async () => {
-  //   let sockets = []
-  //   console.log('ggggg', socket.client.id);
-  //   // console.log(io.sockets.connected);
-  //   for (i in io.sockets.connected) {
-  //     sockets.push(i)
-  //   }
-  //   console.log('sssss', sockets);
-  //   let result = await controller.getAllDevice()
-  //   console.log('dd '+socket.id);
-  //   let newRet = result.map(i=>i.sid).filter(v=>{
-  //     console.log('vvvvv'+v);
-  //     return v !== socket.id
-  //   })
-  //   console.log(newRet);
-  //   // console.log(socket.client.request);
-  //   io.emit('allDevice', {
-  //     // id: socket.client.id
-  //     data: newRet
-  //   })
-  //   // io.emit('alld', {
-  //   //   id: socket.client.id
-  //   // })
-  // })
-  socket.on('offline', data => {
-    console.log('off ', data);
-    io.emit('dis')
-    socket.disconnect()
+
+  socket.on('offline', sid => {
+    socket.broadcast.to(sid).emit('dis', sid)
+    socket.leave(sid)
   })
+
   socket.on('disconnect', () => {
-    console.log(`disconnect ${socket.id}`)
-    console.log(`delete ${socket.id} ${onlineDevice.name}`)
-    delete onlineDevice.name
-    io.emit('dis')
+    console.log(chalk.yellow(`client ${socket.id} disconnected`));
   })
 })
 
-// io.on('disconnect', socket => {
-//   console.log('disconnect socket', socket);
-// })
+io.on('disconnect', socket => {
+  console.log(chalk.yellow(`disconnect socket ${socket}`));
+})
 
 server.listen(port, ()=>{
   console.log(chalk.blue(`listening on port ${chalk.yellowBright(port)}`));

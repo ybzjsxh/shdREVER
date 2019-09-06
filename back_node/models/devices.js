@@ -17,8 +17,8 @@ let devicesSchema = new Schema({
     require: true
   },
   close: Boolean,
-  createTime: String,
-  lastCloseTime: String,
+  createTime: Date,
+  lastCloseTime: Date,
   sid: {
     type: String,
     // require: true

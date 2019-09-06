@@ -1,8 +1,6 @@
 // const crypto = require('crypto');
 const chalk = require('chalk');
 const controller = require('../controller');
-// const serve = require('koa-static');
-
 
 // 登录
 export const login = async (ctx, next) => {
@@ -24,7 +22,6 @@ export const login = async (ctx, next) => {
     ctx.response.body = {code: 503, msg: '密码不正确！'}
   }
 }
-
 
 // 注册设备
 // export const register = async (ctx, next) => {
