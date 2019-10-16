@@ -16,7 +16,7 @@
 - lib: antd, umi
 - state_management: dva
 
-## back: python <del>2.7</del> 3.6
+## back: python ~~2.7~~ 3.6
 
 - lib: flask, flask_jwt_extended
 - toStart:
@@ -25,8 +25,8 @@
 
 ## back_node: nodejs
 
-- lib: koa
-- db: mongo
+- lib: koa socket.io
+- db: MongoDB
 
 ## client: python: 2.7
 
@@ -35,4 +35,4 @@
 
 ## client_node: nodejs
 
-- TODO
+- lib: pkg socket.io-client

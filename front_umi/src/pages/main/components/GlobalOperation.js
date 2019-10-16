@@ -1,19 +1,16 @@
 import React from 'react';
-import { Button, message, Modal } from 'antd';
+import { Button, message, Modal, Tooltip } from 'antd';
 import { connect } from 'dva';
-import axios from 'axios';
 
-const GlobalOperation = () => {
+const GlobalOperation = props => {
   const closeAll = () => {
     Modal.confirm({
       title: '确定关闭所有设备吗？',
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        axios
-          .get('/closeAll')
-          .then(message.success('操作成功！'))
-          .catch(err => console.log(err));
+        props.dispatch({ type: 'device/closeAll' });
+        message.success('操作成功！');
       },
     });
   };
@@ -23,10 +20,8 @@ const GlobalOperation = () => {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        axios
-          .get('/awakeAll')
-          .then(message.success('操作成功！'))
-          .catch(err => console.log(err));
+        props.dispatch({ type: 'device/awakeAll' });
+        message.success('操作成功！');
       },
     });
   };
@@ -34,21 +29,24 @@ const GlobalOperation = () => {
   return (
     <div>
       <Button
-        type="danger"
-        icon="exclamation-circle"
-        onClick={closeAll}
-        style={{ margin: '0 10px 10px 0' }}
-      >
+       type="danger"
+       icon="poweroff"
+       onClick={closeAll}
+       style={{ margin: '0 10px 10px 0' }}
+       >
         关闭所有设备
       </Button>
-      <Button
-        type="danger"
-        icon="exclamation-circle"
-        onClick={awakeAll}
-        style={{ margin: '0 10px 10px 0' }}
-      >
-        开启所有设备
-      </Button>
+      <Tooltip title="暂未开发，敬请期待~" placement="right" trigger='click'>
+        <Button
+          type="danger"
+          icon="exclamation-circle"
+          onClick={awakeAll}
+          style={{ margin: '0 10px 10px 0' }}
+          disabled
+        >
+          开启所有设备
+        </Button>
+      </Tooltip>
     </div>
   );
 };

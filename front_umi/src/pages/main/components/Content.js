@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Button, Tag, Modal, Icon } from 'antd';
+import { Table, Button, Tag, Modal, Icon, message, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 // import io from 'socket.io-client';
 
@@ -59,13 +59,16 @@ class Content extends React.Component {
       render: (text, record) => (
         <span>
           {record.close ? (
-            <Button
-              type="primary"
-              style={{ margin: '0 10px 10px 0' }}
-              onClick={() => this.awakeDevice()}
-            >
-              开启设备
-            </Button>
+            <Tooltip title='暂未开发，敬请期待~' trigger='click'>
+              <Button
+                type="primary"
+                style={{ margin: '0 10px 10px 0' }}
+                onClick={() => this.awakeDevice()}
+                disabled
+              >
+                开启设备
+              </Button>
+            </Tooltip>
           ) : (
             <Button
               type="danger"
@@ -113,10 +116,12 @@ class Content extends React.Component {
 
   awakeDevice = (name, ip) => {
     this.props.dispatch({ type: 'device/awakeDevice', payload: { name, ip } });
+    message.success('操作成功！')
   };
 
   closeDevice = (name, ip, sid) => {
     this.props.dispatch({ type: 'device/closeDevice', payload: { name, ip, sid } });
+    message.success('操作成功！')
   };
 
   clearDevice = (name, ip) => {
@@ -127,6 +132,7 @@ class Content extends React.Component {
       cancelText: '取消',
       onOk() {
         that.props.dispatch({ type: 'device/clearDevice', payload: { name, ip } });
+        message.success('操作成功！')
       },
     });
   };

@@ -37,9 +37,9 @@ export const register = async (ip, name, mac, sid) => {
 };
 
 // 检查是否存在
-export const checkDevice = async (ip, name) => {
+export const checkDevice = async (ip, name, mac) => {
   // console.log(ip, name);
-  let result = await devices.find({ ip, name }, (err, doc) => {
+  let result = await devices.find({ ip, name, mac }, (err, doc) => {
     if (!err) console.log(chalk.green('query ok'));
   });
   return JSON.stringify(result) === '[]' ? false : true;
@@ -58,7 +58,7 @@ export const closeDevice = async (ip, name, sid) => {
 
 // 关闭所有设备
 export const closeAll = async () => {
-  // TODO: 关闭所有客户端
+  socket.emit('closeAll');
   let result = await devices.updateMany(
     {},
     { $set: { close: true, lastCloseTime: moment().format('YYYY-MM-DD HH:mm:ss'), sid: null } },
