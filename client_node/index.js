@@ -12,11 +12,16 @@ const get_host_ip_mac = () => {
   let add = os.networkInterfaces();
   for (var devName in add) {
     // console.log(devName);
-    if (devName === '本地连接' || devName === 'WLAN' || devName === 'en0' || devName === 'ens') {
+    if (/(^(无线网络|本地)连接(\s\d?)?|^WLAN|^en0|^ens|^eth0)/g.test(devName)) {
       var iface = add[devName];
       for (var i = 0; i < iface.length; i++) {
         var alias = iface[i];
-        if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+        if (
+          alias.family === 'IPv4' &&
+          alias.address !== '127.0.0.1' &&
+          !alias.internal &&
+          /^\d{2,3}$/.test(alias.address.split('.')[0])
+        ) {
           // console.log(alias.address, alias.mac);
           return { ip: alias.address, mac: alias.mac };
         }

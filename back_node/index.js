@@ -27,7 +27,8 @@ router
   .get('/closeAll', routes.closeAll)
   .get('/clearDevice', routes.clearDevice)
   .get('/clearAll', routes.clearAll)
-  .get('/awakeDevice', routes.awakeDevice);
+  .get('/awakeDevice', routes.awakeDevice)
+  .get('/awakeAll', routes.awakeAll);
 
 app.use(router.routes());
 
@@ -37,8 +38,8 @@ io.on('connection', socket => {
   socket.on('register', async data => {
     let { ip, name, mac } = data;
     let check = await controller.checkDevice(ip, name, mac);
-    if ( check ) {
-      console.log(`already exist, awaking now, new sid: ${socket.id}`);
+    if (check) {
+      console.log(`${name} already exist, awaking now, new sid: ${socket.id}`);
       controller.awakeDevice(ip, name, mac, socket.id);
     } else {
       console.log(`register device ${data.name}`);
