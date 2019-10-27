@@ -1,7 +1,7 @@
 require('babel-register');
 require('babel-polyfill');
 const Koa = require('koa');
-const router = require('koa-router')();
+const router = require('koa-router')({ prefix: '/api' });
 const serve = require('koa-static');
 const path = require('path');
 const chalk = require('chalk');
@@ -29,6 +29,13 @@ router
   .get('/clearAll', routes.clearAll)
   .get('/awakeDevice', routes.awakeDevice)
   .get('/awakeAll', routes.awakeAll);
+
+app.use(async (ctx, next) => {
+  await next();
+  if (parseInt(ctx.status) === 404) {
+    ctx.response.redirect('/');
+  }
+});
 
 app.use(router.routes());
 

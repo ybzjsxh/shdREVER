@@ -1,6 +1,7 @@
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
+  history: 'hash',
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
@@ -8,7 +9,7 @@ export default {
       {
         antd: true,
         dva: true,
-        dynamicImport: false,
+        dynamicImport: true,
         title: 'Shutdown v3.0',
         dll: false,
 
@@ -30,7 +31,6 @@ export default {
   // },
   hash: true,
   ssr: true,
-  history: 'hash',
   proxy: {
     '/api': {
       target: 'http://localhost:8888',

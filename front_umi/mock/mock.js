@@ -1,6 +1,6 @@
 export default {
-  'POST /login': { code: 200, success: true },
-  'GET /getAllDevice': {
+  'POST /api/login': { code: 200, success: true },
+  'GET /api/getAllDevice': {
     code: 200,
     success: true,
     data: [
@@ -18,7 +18,7 @@ export default {
       },
     ],
   },
-  'GET /closeDevice': { code: 200, success: true},
-  'GET /clearDevice': { code: 200, success: true},
-  'GET /closeAll': { code: 200, success: true},
+  'GET /api/closeDevice': { code: 200, success: true},
+  'GET /api/clearDevice': { code: 200, success: true},
+  'GET /api/closeAll': { code: 200, success: true},
 };
