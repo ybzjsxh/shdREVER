@@ -20,7 +20,7 @@ const get_host_ip_mac = () => {
           alias.family === 'IPv4' &&
           alias.address !== '127.0.0.1' &&
           !alias.internal &&
-          /^\d{2,3}$/.test(alias.address.split('.')[0])
+          /^\d{2,3}$/.test(alias.address.split('.')[0])  // 排除vpn
         ) {
           // console.log(alias.address, alias.mac);
           return { ip: alias.address, mac: alias.mac };
