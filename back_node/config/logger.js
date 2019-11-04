@@ -14,8 +14,8 @@ log4js.configure({
     }
   },
   categories: {
-    default: { appenders: ['out'], level: 'info' },
-    net: { appenders: ['net'], level: 'info' }
+    default: { appenders: ['out'], level: 'info', backup: 7 },
+    net: { appenders: ['net'], level: 'info', backup: 7 }
   }
 })
 

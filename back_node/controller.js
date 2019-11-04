@@ -93,15 +93,19 @@ export const clearAll = async () => {
 };
 
 // 开启一台设备
-export const awakeDevice = async (ip, name, mac) => {
+export const awakeDevice = async (ip, name, mac, sid = null) => {
+  let result = await devices.updateOne(
+    { ip, name },
+    { $set: { close: false, lastCloseTime: moment().format('YYYY-MM-DD HH:mm:ss'), sid } }
+  );
   wol.wake(mac, err => {
     if (err) {
       logger.error(err)
       return Promise.reject();
     } else {
       console.log(`send wol to ${mac}`);
-      logger.info(`awake device: ${name} ${mac} at ${moment().format('YYMMDD HH:mm:ss')}`);
-      return Promise.resolve()
+      logger.info(`awake device: ${name} ${ip} ${sid} at ${moment().format('YYMMDD HH:mm:ss')}`);
     }
   })
+  return result;
 };
