@@ -21,10 +21,11 @@ module.exports = {
       //  env_production: {
       //    NODE_ENV: 'production',
       //  },
-      out_file: './logs/out.log', // 普通日志路径
-      error_file: './logs/err.log', // 错误日志路径
-      merge_logs: true,
-      log_date_format: 'YYYY-MM-DD',
+      out_file: './logs/pm2_logs/out.log', // 普通日志路径
+      error_file: './logs/pm2_logs/err.log', // 错误日志路径
+      merge_logs: false,
+      time: true, // 标准时间戳
+      log_date_format: 'YYYY-MM-DD HH:mm:ss',
     },
   ],
 };

@@ -1,22 +1,27 @@
-const path = require('path');
-const log4js = require('log4js');
-
+const path = require("path");
+const log4js = require("log4js");
 
 log4js.configure({
   appenders: {
     net: {
-      type: 'dateFile',
-      pattern: 'yyMMdd',
-      filename: path.join(__dirname, '../logs/', 'net.log')
+      type: "dateFile",
+      pattern: "yyMMdd",
+      filename: path.join(__dirname, "../logs/net/", "net.log"),
+      keepFileExt: true,
+      daysToKeep: 7
     },
     out: {
-      type: 'console'
+      type: "dateFile",
+      pattern: "yyMMdd",
+      filename: path.join(__dirname, "../logs/out/", "out.log"),
+      keepFileExt: true,
+      daysToKeep: 7
     }
   },
   categories: {
-    default: { appenders: ['out'], level: 'info', backup: 7 },
-    net: { appenders: ['net'], level: 'info', backup: 7 }
+    default: { appenders: ["out"], level: "info" },
+    net: { appenders: ["net"], level: "info" }
   }
-})
+});
 
-export const net = log4js.getLogger('net');
+export const net = log4js.getLogger("net");
