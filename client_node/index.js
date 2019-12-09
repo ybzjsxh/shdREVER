@@ -1,9 +1,11 @@
-const os = require('os');
-const io = require('socket.io-client');
-const child_process = require('child_process');
+const os = require("os");
+const io = require("socket.io-client");
+const child_process = require("child_process");
 
-const { svr_ip, svr_port, name, command } = require(process.cwd() + '/config.json');
+const { svr_ip, svr_port, name, delay } = require(process.cwd() +
+  "/config.json");
 // console.log(ip, name, mac);
+const OS_TYPE = os.platform();
 
 // let socket = io.connect(`ws://${svr_ip}:${svr_port}`)
 let socket = io(`ws://${svr_ip}:${svr_port}`, { reconnection: false });
@@ -17,10 +19,10 @@ const get_host_ip_mac = () => {
       for (var i = 0; i < iface.length; i++) {
         var alias = iface[i];
         if (
-          alias.family === 'IPv4' &&
-          alias.address !== '127.0.0.1' &&
+          alias.family === "IPv4" &&
+          alias.address !== "127.0.0.1" &&
           !alias.internal &&
-          /^\d{2,3}$/.test(alias.address.split('.')[0])  // 排除vpn
+          /^\d{2,3}$/.test(alias.address.split(".")[0]) // 排除vpn
         ) {
           // console.log(alias.address, alias.mac);
           return { ip: alias.address, mac: alias.mac };
@@ -31,57 +33,55 @@ const get_host_ip_mac = () => {
 };
 // get_host_ip_mac()
 
-const register = async (ip, name, mac) => {
-  socket.emit('online', {
-    ip,
-    name,
-    mac,
-  });
+const shutdown = () => {
+  switch (OS_TYPE) {
+    case "win32":
+      child_process.exec(`shutdown -s -t ${delay}`, () => {
+        console.log("bye");
+      });
+      break;
+    case "linux":
+      child_process.exec(`sudo shutdown -h +${delay / 60}`, () => {
+        console.log("bye");
+      });
+      break;
+    default:
+      throw new Error("不支持的系统平台");
+  }
 };
 
-socket.on('connect', () => {
+socket.on("connect", () => {
   console.log(`${name} connected to ${svr_ip}:${svr_port}...`);
   let { ip, mac } = get_host_ip_mac();
   // console.log(ip, mac, name);
   // register(ip, name, mac)
   let sid = socket.id;
   console.log(sid);
-  socket.emit('register', {
+  socket.emit("register", {
     ip,
     name,
     mac,
-    sid,
+    type: OS_TYPE,
+    sid
   });
 });
 
-socket.on('dis', sid => {
+socket.on("dis", sid => {
   if (sid == socket.id) {
     socket.disconnect(true);
-    name.toLowerCase().indexOf('win') > -1
-      ? child_process.exec(command.windows, () => {
-          console.log('bye');
-        })
-      : child_process.exec(command.linux, () => {
-          console.log('bye');
-        });
+    shutdown();
   } else {
-    console.log('not you', socket.id);
+    console.log("not you", socket.id);
   }
 });
 
-socket.on('all', () => {
+socket.on("all", () => {
   socket.disconnect(true);
-  console.log('close by closeAll');
-  name.toLowerCase().includes('win')
-    ? child_process.exec(command.windows, () => {
-        console.log('bye');
-      })
-    : child_process.exec(command.linux, () => {
-        console.log('bye');
-      });
+  console.log("close by closeAll");
+  shutdown();
 });
 
-socket.on('disconnect', () => {
-  console.log('disconnected');
-  socket.emit('offline');
+socket.on("disconnect", () => {
+  console.log("disconnected");
+  socket.emit("offline");
 });

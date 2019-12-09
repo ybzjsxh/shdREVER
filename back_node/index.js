@@ -2,8 +2,8 @@ require('babel-register');
 require('babel-polyfill');
 const Koa = require('koa');
 const router = require('koa-router')({ prefix: '/api' });
-const serve = require('koa-static');
-const path = require('path');
+// const serve = require('koa-static');
+// const path = require('path');
 const chalk = require('chalk');
 const koabody = require('koa-body');
 
@@ -18,7 +18,8 @@ const port = process.env.port || 8888;
 
 app.use(koabody());
 
-app.use(serve(path.resolve(__dirname, 'dist')));
+// don't need back end rendering 191209
+// app.use(serve(path.resolve(__dirname, 'dist')));
 router
   .post('/login', routes.login)
   // .get('/register', routes.register)
@@ -43,14 +44,14 @@ io.on('connection', socket => {
   socket.join(socket.id);
   console.log(io.sockets.adapter.rooms);
   socket.on('register', async data => {
-    let { ip, name, mac } = data;
-    let check = await controller.checkDevice(ip, name, mac);
+    let { ip, name, mac, type } = data;
+    let check = await controller.checkDevice(ip, name, mac, type);
     if (check) {
       console.log(`${name} already exist, awaking now, new sid: ${socket.id}`);
-      controller.awakeDevice(ip, name, mac, socket.id);
+      controller.awakeDevice(ip, name, mac, type, socket.id);
     } else {
       console.log(`register device ${data.name}`);
-      controller.register(ip, name, mac, socket.id);
+      controller.register(ip, name, mac, type, socket.id);
     }
   });
 

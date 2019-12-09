@@ -33,7 +33,7 @@ export default () => {
           <div className={styles['bs__oops']}>OOPS!</div>
           <div className={styles['bs__info']}>
             版权所有
-            <a className={styles['link-type']} href="/login" target="_blank">
+            <a className={styles['link-type']} href="/login" target="_top">
               fc
             </a>
           </div>

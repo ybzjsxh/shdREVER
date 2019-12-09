@@ -1,21 +1,49 @@
 .wscn-http404-container {
-  transform: translate(-50%, -50%);
-  position: absolute;
-  top: 40%;
-  left: 50%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+  .wscn-http404{
+    padding: 0 50px;
+    .pic-404 {
+      transform: translate(30px);
+      width: 400px !important;
+      margin: 20px auto 0 !important;
+      &__child {
+        transform: scale(0.5);
+        &.left {
+          width: 40px !important;
+        }
+        &.mid {
+          width: 23px !important;
+        }
+        &.right{
+          width: 31px !important;
+        }
+      }
+    }
+    .bs {
+      margin: 20px 0;
+    }
+  }
 }
 
 .wscn-http404 {
   position: relative;
-  width: 1200px;
-  padding: 0 50px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 
   .pic-404 {
     position: relative;
     float: left;
     width: 600px;
     overflow: hidden;
+    margin: 30px auto 0;
 
     &__parent {
       width: 100%;
@@ -141,11 +169,13 @@
   }
 
   .bs {
-    position: relative;
-    float: left;
-    width: 300px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 200px;
     padding: 30px 0;
     overflow: hidden;
+    text-align: left;
 
     &__oops {
       font-size: 32px;
@@ -157,6 +187,8 @@
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-fill-mode: forwards;
+      width: 100%;
+      text-align: center;
     }
 
     &__headline {
@@ -185,8 +217,9 @@
     }
 
     &__return-home {
-      display: block;
-      float: left;
+      // display: flex;
+      // float: left;
+      justify-content: center;
       width: 110px;
       height: 36px;
       background: #1482f0;

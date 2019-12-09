@@ -19,7 +19,7 @@ export const login = async (ctx, next) => {
       });
       return (ctx.response.body = { code: 200, msg: 'logined' });
     }
-    ctx.response.body = { code: 503, msg: '密码不正确！' };
+    ctx.response.body = { code: 403, msg: '密码不正确！' };
   }
 };
 
@@ -45,10 +45,10 @@ export const getAllDevice = async (ctx, next) => {
 
 // 关闭一台设备
 export const closeDevice = async (ctx, next) => {
-  const { ip, name, mac, sid } = ctx.request.query;
+  const { ip, name, mac, type, sid } = ctx.request.query;
   if (!!ip && !!name) {
-    console.log(chalk.red(`closing device ${name} ${ip} ${sid}`));
-    let result = await controller.closeDevice(ip, name, sid);
+    console.log(chalk.red(`closing device ${name} ${ip} ${type} ${sid}`));
+    let result = await controller.closeDevice(ip, name, type, sid);
     if (result) {
       return (ctx.response.body = { code: 200, msg: 'ok' });
     }
@@ -64,9 +64,9 @@ export const closeAll = async (ctx, next) => {
 
 // 清除一台设备
 export const clearDevice = async (ctx, next) => {
-  const { ip, name } = ctx.request.query;
+  const { ip, name, type } = ctx.request.query;
   if (ip && name) {
-    let result = await controller.clearDevice(ip, name);
+    let result = await controller.clearDevice(ip, name, type);
     return (ctx.response.body = { code: 200, msg: 'ok' });
   }
   return (ctx.response.body = { code: 500, msg: 'missing params' });
@@ -80,8 +80,8 @@ export const clearAll = async (ctx, next) => {
 
 // 开启一台设备
 export const awakeDevice = async (ctx, next) => {
-  const { ip, name, mac } = ctx.request.query;
-  let result = await controller.awakeDevice(ip, name, mac);
+  const { ip, name, mac, type } = ctx.request.query;
+  let result = await controller.awakeDevice(ip, name, mac, type);
   return (ctx.response.body = { code: 200, msg: 'ok' });
 };
 

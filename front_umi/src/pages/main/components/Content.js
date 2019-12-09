@@ -31,25 +31,41 @@ class Content extends React.Component {
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      width: 100,
+      width: 90,
       fixed: 'left',
-      filters: [{ text: '在线', value: false }, { text: '离线', value: true }],
+      filters: [
+        { text: '在线', value: false },
+        { text: '离线', value: true },
+      ],
       onFilter: (value, record) => record.close === value,
-      render: (text, record) => <Tag color="#2db7f5">{text}</Tag>,
+      render: (text, record) => <Tag color="#108ee9">{text}</Tag>,
+    },
+    {
+      title: '设备类型',
+      dataIndex: 'type',
+      key: 'type',
+      align: 'center',
+      width: 110,
+      filters: [
+        { text: 'Windows', value: 'win32' },
+        { text: 'Linux', value: 'linux' },
+      ],
+      onFilter: (value, record) => record.type === value,
+      render: (text, record) => <Tag color="#87d068">{text}</Tag>,
     },
     {
       title: '设备ip',
       dataIndex: 'ip',
       key: 'ip',
       align: 'center',
-      width: 150,
+      width: 120,
     },
     {
       title: '设备mac',
       dataIndex: 'mac',
       key: 'mac',
       align: 'center',
-      width: 150,
+      width: 120,
     },
     {
       title: '操作',
@@ -59,7 +75,7 @@ class Content extends React.Component {
       render: (text, record) => (
         <span>
           {record.close ? (
-            <Tooltip title='暂未开发，敬请期待~' trigger='click'>
+            <Tooltip title="暂未开发，敬请期待~" trigger="click">
               <Button
                 type="primary"
                 style={{ margin: '0 10px 10px 0' }}
@@ -73,14 +89,23 @@ class Content extends React.Component {
             <Button
               type="danger"
               style={{ margin: '0 10px 10px 0' }}
-              onClick={() => this.closeDevice(record.name, record.ip, record.sid)}
+              onClick={() =>
+                this.closeDevice(
+                  record.name,
+                  record.ip,
+                  record.type,
+                  record.sid,
+                )
+              }
             >
               关闭设备
             </Button>
           )}
           <Button
             type="danger"
-            onClick={() => this.clearDevice(record.name, record.ip)}
+            onClick={() =>
+              this.clearDevice(record.name, record.ip, record.type)
+            }
             style={{ margin: '0 10px 10px 0' }}
           >
             清除设备
@@ -114,25 +139,34 @@ class Content extends React.Component {
     clearInterval(this.getAllDevice);
   }
 
-  awakeDevice = (name, ip) => {
-    this.props.dispatch({ type: 'device/awakeDevice', payload: { name, ip } });
-    message.success('操作成功！')
+  awakeDevice = (name, ip, type) => {
+    this.props.dispatch({
+      type: 'device/awakeDevice',
+      payload: { name, ip, type },
+    });
+    message.success('操作成功！');
   };
 
-  closeDevice = (name, ip, sid) => {
-    this.props.dispatch({ type: 'device/closeDevice', payload: { name, ip, sid } });
-    message.success('操作成功！')
+  closeDevice = (name, ip, type, sid) => {
+    this.props.dispatch({
+      type: 'device/closeDevice',
+      payload: { name, ip, type, sid },
+    });
+    message.success('操作成功！');
   };
 
-  clearDevice = (name, ip) => {
+  clearDevice = (name, ip, type) => {
     let that = this;
     Modal.confirm({
       title: '确定清除这台设备吗？',
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        that.props.dispatch({ type: 'device/clearDevice', payload: { name, ip } });
-        message.success('操作成功！')
+        that.props.dispatch({
+          type: 'device/clearDevice',
+          payload: { name, ip, type },
+        });
+        message.success('操作成功！');
       },
     });
   };
@@ -161,7 +195,7 @@ class Content extends React.Component {
 
 Content.propTypes = {
   data: PropTypes.string,
-  columns: PropTypes.string
-}
+  columns: PropTypes.string,
+};
 
 export default Content;
