@@ -4,8 +4,7 @@
     "start": "umi dev",
     "build": "umi build",
     "test": "umi test",
-    "lint": "eslint --ext .js src mock tests",
-    "precommit": "lint-staged"
+    "lint": "eslint --ext .js src mock"
   },
   "dependencies": {
     "antd": "^3.23.6",
@@ -17,8 +16,8 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.5.1",
-    "eslint-config-umi": "^1.5.0",
+    "eslint": "^6.7.2",
+    "eslint-config-umi": "^1.6.0",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -28,6 +27,11 @@
     "react-test-renderer": "^16.10.2",
     "umi": "^2.10.0",
     "umi-plugin-react": "^1.12.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.{js,jsx}": [

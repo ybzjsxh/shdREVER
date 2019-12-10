@@ -24,8 +24,9 @@ export default {
           params: payload,
         }),
       );
-      if (data.code == 200) {
+      if (data.code === 200) {
         yield put({ type: 'signin' });
+        sessionStorage.setItem('token', '123456')
         message.success('登陆成功');
         router.push('/main');
       } else {
