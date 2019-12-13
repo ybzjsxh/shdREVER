@@ -53,7 +53,7 @@ export const checkDevice = async (ip, name, mac, type) => {
 export const closeDevice = async (ip, name, type, sid) => {
   socket.emit("offline", sid);
   let result = await devices.updateOne(
-    { ip, name },
+    { ip, name, type },
     {
       $set: {
         close: true,

@@ -9,7 +9,7 @@ export default {
       {
         antd: true,
         dva: true,
-        dynamicImport: true,
+        //dynamicImport: true,
         title: 'Shutdown v3.0',
         dll: false,
 
@@ -30,12 +30,12 @@ export default {
   //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
   // },
   hash: true,
-  ssr: true,
+  //ssr: true,
   proxy: {
     '/api': {
       target: 'http://localhost:8888',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      // pathRewrite: { '^/api': '' },
     },
   },
 };
