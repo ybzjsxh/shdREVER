@@ -9,15 +9,17 @@ export default {
           data: [
             {
               ip: '192.168.100.100',
-              name: 'xxx',
+              name: '哈哈哈哈哈哈哈',
               mac: '00:00:00:11:22:33',
+              lastCloseTime: '2020-03-04T04:46:47.000Z',
               type: 'win32',
               close: true,
             },
             {
               ip: '192.168.100.101',
-              name: 'xxxx',
+              name: '哈哈哈哈哈哈哈',
               type: 'linux',
+              lastCloseTime: '2020-03-04T04:46:47.000Z',
               mac: '00:00:00:11:22:33',
               close: false,
             },

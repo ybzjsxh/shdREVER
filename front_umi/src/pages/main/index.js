@@ -21,12 +21,12 @@ class Main extends React.Component {
           </Col>
         </Row>
         <Row type="flex" justify="center" style={{ marginTop: '10px' }}>
-          <Col xs={24} sm={24} md={18} lg={18} xl={12}>
+          <Col xs={24} sm={24} md={18} lg={18} xl={16}>
             <Status />
           </Col>
         </Row>
         <Row type="flex" justify="center" style={{ marginTop: '10px' }}>
-          <Col xs={24} sm={24} md={18} lg={18} xl={12}>
+          <Col xs={24} sm={24} md={18} lg={18} xl={16}>
             <Content />
           </Col>
         </Row>

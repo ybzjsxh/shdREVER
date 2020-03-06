@@ -23,7 +23,7 @@ const Status = ({ awakeNum, closeNum, devNum }) => {
                 />
               </Col>
               <Col style={{ marginRight: 10 }}>
-                <Statistic title="离线" value={closeNum} prefix={<Icon type="frown" />} />
+                <Statistic title="离线" value={closeNum} prefix={<Icon type="frown" theme="twoTone" twoToneColor="red" />} />
               </Col>
               <Col>
                 <Statistic

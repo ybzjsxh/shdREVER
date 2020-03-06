@@ -37,8 +37,10 @@ class Login extends React.Component {
     return (
       <div
         style={{
+          width: '80vw',
+          height: '35vh',
           border: '0px solid red',
-          margin: '0 50px',
+          margin: '120px auto',
           padding: '0px 30px 80px',
           background: '#fff',
           borderRadius: 10,

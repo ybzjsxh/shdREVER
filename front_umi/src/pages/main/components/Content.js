@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Table, Button, Tag, Modal, Icon, message, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 // import io from 'socket.io-client';
 
 @connect(({ device, loading }) => ({
@@ -31,7 +32,7 @@ class Content extends React.Component {
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      width: 90,
+      width: 105,
       fixed: 'left',
       filters: [
         { text: '在线', value: false },
@@ -43,35 +44,50 @@ class Content extends React.Component {
     {
       title: '设备类型',
       dataIndex: 'type',
+      ellipsis: true,
       key: 'type',
       align: 'center',
-      width: 110,
+      // width: 110,
       filters: [
         { text: 'Windows', value: 'win32' },
         { text: 'Linux', value: 'linux' },
       ],
       onFilter: (value, record) => record.type === value,
-      render: (text, record) => <Tag color="#87d068">{text}</Tag>,
+      render: (text, record) => (
+        <Tag color={record.type === 'win32' ? '#87d068' : '#f50'}>{text}</Tag>
+      ),
     },
     {
       title: '设备ip',
       dataIndex: 'ip',
       key: 'ip',
       align: 'center',
-      width: 120,
+      width: 150,
     },
     {
       title: '设备mac',
+      // ellipsis: true,
       dataIndex: 'mac',
       key: 'mac',
       align: 'center',
+      width: 160,
+    },
+    {
+      title: '上次关机时间',
+      dataIndex: 'lastCloseTime',
+      key: 'lastCloseTime',
+      align: 'center',
       width: 120,
+      render: (text, record) => (
+        <span>{dayjs(record.lastCloseTime).format('YY-MM-DD HH:mm:ss')}</span>
+      ),
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
+      width: 250,
       render: (text, record) => (
         <span>
           {record.close ? (
