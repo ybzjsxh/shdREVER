@@ -1,7 +1,7 @@
 require('babel-register');
 require('babel-polyfill');
 const Koa = require('koa');
-const router = require('koa-router')({ prefix: '/api' });
+const router = require('koa-router')({ prefix: '/shutdown/api' });
 // const serve = require('koa-static');
 // const path = require('path');
 const chalk = require('chalk');

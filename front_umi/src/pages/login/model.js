@@ -1,6 +1,7 @@
 import router from 'umi/router';
 import request from '@/utils/request';
 import { message } from 'antd';
+import md5 from 'md5';
 
 export default {
   namespace: 'login',
@@ -26,11 +27,11 @@ export default {
       );
       if (data.code === 200) {
         yield put({ type: 'signin' });
-        sessionStorage.setItem('token', '123456')
+        sessionStorage.setItem('shutdownToken', md5(new Date().getTime()));
         message.success('登陆成功');
         router.push('/main');
       } else {
-        message.error(data.msg)
+        message.error(data.msg);
       }
     },
   },

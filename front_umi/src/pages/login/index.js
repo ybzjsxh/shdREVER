@@ -37,7 +37,8 @@ class Login extends React.Component {
     return (
       <div
         style={{
-          width: '80vw',
+          // width: '80vw',
+          width: '80%',
           height: '35vh',
           border: '0px solid red',
           margin: '120px auto',
@@ -68,7 +69,12 @@ class Login extends React.Component {
                 )}
               </Form.Item>
               <Form.Item>
-                <Button htmlType="submit" type="primary" block style={{ marginTop: '10px' }}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  block
+                  style={{ marginTop: '10px' }}
+                >
                   登陆
                 </Button>
               </Form.Item>

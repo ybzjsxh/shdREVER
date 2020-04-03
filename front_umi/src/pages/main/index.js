@@ -8,11 +8,11 @@ import Redirect from 'umi/redirect'
 
 class Main extends React.Component {
   componentWillUnmount() {
-    sessionStorage.clear();
+    sessionStorage.removeItem('shutdownToken');
   }
 
   render() {
-    let token = sessionStorage.getItem('token');
+    let token = sessionStorage.getItem('shutdownToken');
     return token ? (
       <div>
         <Row type="flex" justify="center" style={{ marginTop: '10px' }}>

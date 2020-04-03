@@ -1,7 +1,7 @@
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
-  history: 'hash',
+  // history: 'hash',
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
@@ -24,7 +24,10 @@ export default {
         },
       },
     ],
+    ['@umijs/plugin-qiankun/slave'],
   ],
+  base: '/shutdown',
+  mountElementId: 'shutdown-root',
   // chainWebpack(config) {
   //   config.plugin('webpack-bundle-analyzer')
   //   .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
@@ -32,10 +35,10 @@ export default {
   hash: true,
   //ssr: true,
   proxy: {
-    '/api': {
+    '/shutdown/api': {
       target: 'http://localhost:8888',
       changeOrigin: true,
-      // pathRewrite: { '^/api': '' },
+      // pathRewrite: { '^/shutdown': '' },
     },
   },
 };
