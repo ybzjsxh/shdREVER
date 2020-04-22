@@ -2,6 +2,13 @@
 export default {
   treeShaking: true,
   // history: 'hash',
+  routes: [
+    { path: '/', component: '../pages/main' },
+    { path: '/login', component: '../pages/login' },
+    { path: '/main', component: '../pages/main' },
+  ],
+  // publicPath: `//localhost:${process.env.PORT}/`,
+  publicPath: `/`,
   plugins: [
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     [
@@ -35,7 +42,7 @@ export default {
   hash: true,
   //ssr: true,
   proxy: {
-    '/shutdown/api': {
+    '/api': {
       target: 'http://localhost:8888',
       changeOrigin: true,
       // pathRewrite: { '^/shutdown': '' },
