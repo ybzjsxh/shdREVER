@@ -42,7 +42,7 @@ export default {
   hash: true,
   //ssr: true,
   proxy: {
-    '/api': {
+    '/shutdown/api': {
       target: 'http://localhost:8888',
       changeOrigin: true,
       // pathRewrite: { '^/shutdown': '' },
