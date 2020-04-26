@@ -47,7 +47,8 @@ class Content extends React.Component {
       ellipsis: true,
       key: 'type',
       align: 'center',
-      // width: 110,
+      width: 110,
+      ecllipsis: true,
       filters: [
         { text: 'Windows', value: 'win32' },
         { text: 'Linux', value: 'linux' },
@@ -71,6 +72,20 @@ class Content extends React.Component {
       key: 'mac',
       align: 'center',
       width: 160,
+    },
+    {
+      title: '开机时间',
+      dataIndex: 'awakeTime',
+      key: 'awakeTime',
+      align: 'center',
+      width: 120,
+      render: (text, record) => (
+        <span>
+          {!!record.awakeTime
+            ? dayjs(record.awakeTime).format('YY-MM-DD HH:mm:ss')
+            : '已关机'}
+        </span>
+      ),
     },
     {
       title: '上次关机时间',

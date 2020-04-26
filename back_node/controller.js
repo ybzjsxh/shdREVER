@@ -26,6 +26,7 @@ export const register = async (ip, name, mac, type, sid) => {
   newDevice.type = type;
   newDevice.close = false;
   newDevice.createTime = moment().format("YYYY-MM-DD HH:mm:ss");
+  newDevice.awakeTime = moment().format("YYYY-MM-DD HH:mm:ss");
   newDevice.lastCloseTime = null;
   newDevice.sid = sid;
   let result = await newDevice.save((err, doc) => {
@@ -57,9 +58,10 @@ export const closeDevice = async (ip, name, type, sid) => {
     {
       $set: {
         close: true,
+        awakeTime: null,
         lastCloseTime: moment().format("YYYY-MM-DD HH:mm:ss"),
-        sid: null
-      }
+        sid: null,
+      },
     }
   );
   logger.info(`close device: ${name} ${ip} ${type}`);
@@ -74,9 +76,10 @@ export const closeAll = async () => {
     {
       $set: {
         close: true,
+        awakeTime: null,
         lastCloseTime: moment().format("YYYY-MM-DD HH:mm:ss"),
-        sid: null
-      }
+        sid: null,
+      },
     },
     (err, doc) => {
       if (err) {
@@ -114,12 +117,12 @@ export const awakeDevice = async (ip, name, mac, type, sid = null) => {
     {
       $set: {
         close: false,
-        lastCloseTime: moment().format("YYYY-MM-DD HH:mm:ss"),
-        sid
-      }
+        awakeTime: moment().format("YYYY-MM-DD HH:mm:ss"),
+        sid,
+      },
     }
   );
-  wol.wake(mac, err => {
+  wol.wake(mac, (err) => {
     if (err) {
       logger.error(err);
       return Promise.reject();

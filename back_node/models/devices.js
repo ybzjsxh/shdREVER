@@ -23,6 +23,7 @@ let devicesSchema = new Schema(
     },
     close: Boolean,
     createTime: Date,
+    awakeTime: Date,
     lastCloseTime: Date,
     sid: {
       type: String
