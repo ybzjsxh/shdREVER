@@ -4,7 +4,7 @@ import { Row, Col } from 'antd';
 import MainHeader from './components/MainHeader';
 import Status from './components/Status';
 import Content from './components/Content';
-import Redirect from 'umi/redirect'
+import Redirect from 'umi/redirect';
 
 class Main extends React.Component {
   componentWillUnmount() {
@@ -31,7 +31,9 @@ class Main extends React.Component {
           </Col>
         </Row>
       </div>
-    ) : (<Redirect to='/login' />)
+    ) : (
+      <Redirect to="/login" />
+    );
   }
 }
 
