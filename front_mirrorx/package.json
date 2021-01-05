@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "3.23.6",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "md5": "^2.2.1",
     "mirrorx": "^1.1.1",
     "react": "^16.8.6",
